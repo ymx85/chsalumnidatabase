@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHS Alumni Database</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the modal overlay and backdrop */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Darker background */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px); /* More blur */
+            -webkit-backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        /* Animation for the modal content */
+        .modal-content-animated {
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .modal-content-animated.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        /* Apply Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        /* Ensure modal content is scrollable on small screens */
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Styling for navigation buttons */
+        .nav-button {
+            position: absolute;
+            z-index: 1010;
+            padding: 0.75rem;
+            border-radius: 9999px; /* Full rounded */
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: background-color 0.15s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Hide buttons on extra small screens for cleaner mobile view */
+        @media (max-width: 640px) {
+            .nav-button {
+                padding: 0.5rem;
+            }
+        }
+        /* Custom utility for fixed width span to align stats data */
+        .w-28 {
+            width: 7rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-6 text-gray-800">
+            CHS Alumni Database
+        </h1>
+
+        <!-- CLASS YEAR TABS -->
+        <div id="class-year-tabs" class="flex justify-center space-x-2 sm:space-x-4 mb-6 p-1 bg-white rounded-xl shadow-lg">
+            <!-- Tabs will be injected here -->
+        </div>
+        
+        <!-- FILTERS -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <select id="major-filter" onchange="window.renderGrid(window.currentClassYear)" 
+                    class="p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 text-gray-700">
+                <option value="">Filter by Major...</option>
+                <!-- Options injected by JS -->
+            </select>
+            <select id="college-filter" onchange="window.renderGrid(window.currentClassYear)" 
+                    class="p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 text-gray-700">
+                <option value="">Filter by College...</option>
+                <!-- Options injected by JS -->
+            </select>
+        </div>
+
+        <!-- PROFILE GRID CONTAINER -->
+        <div id="profile-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Cards will be injected here by JavaScript -->
+        </div>
+        
+        <!-- NO RESULTS MESSAGE -->
+        <div id="no-results-message" class="hidden text-center p-10 bg-white rounded-xl shadow-lg mt-8">
+            <p class="text-xl font-semibold text-gray-600">No alumni profiles match the current filter selection.</p>
+            <p class="text-md text-gray-500 mt-2">Try resetting your filters or selecting a different class year.</p>
+        </div>
+    </div>
+
+
+    <!-- MODAL POPUP STRUCTURE -->
+    <div id="profile-modal-overlay" class="modal-overlay" onclick="closeModal(event)">
+        
+        <!-- Navigation Buttons Container (relative to overlay) -->
+        <div class="relative flex items-center justify-center w-full h-full">
+
+            <!-- Left Arrow Button -->
+            <button id="prev-profile-btn" onclick="showPreviousProfile(event)" class="nav-button left-4 lg:left-8">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            
+            <!-- Modal Content Container -->
+            <div id="profile-modal-content" class="modal-content modal-content-animated bg-white p-6 sm:p-10 rounded-xl shadow-2xl max-w-3xl w-full m-4" 
+                 onclick="event.stopPropagation()">
+                
+                <!-- Close Button -->
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition duration-150 p-1 rounded-full bg-gray-50 hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <!-- Profile Header (Updated to put Socials next to Name) -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-6 pb-4 border-b">
+                    <img id="modal-image" class="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-indigo-500" src="" alt="Profile Image">
+                    <div class="text-center sm:text-left flex-grow">
+                        <div class="flex flex-col sm:flex-row items-center sm:justify-start space-y-2 sm:space-y-0 sm:space-x-4">
+                            <h2 id="modal-name" class="text-3xl font-extrabold text-gray-900"></h2>
+                            <!-- Social Links Section (Moved next to Name) -->
+                            <div id="social-links-container" class="flex space-x-3">
+                                <!-- Social links injected here -->
+                            </div>
+                        </div>
+                        <p id="modal-college" class="text-xl text-indigo-600 font-semibold mt-1"></p>
+                        <p id="modal-major" class="text-md text-pink-600 font-medium mt-1"></p>
+                    </div>
+                </div>
+                
+                <!-- Advice for Applying (Remains Top Section) -->
+                <div class="mb-8 p-4 bg-indigo-50 rounded-xl shadow-inner border border-indigo-200">
+                    <h3 class="text-xl font-bold text-indigo-800 border-b border-indigo-300 pb-2 mb-3">Advice for Applying</h3>
+                    <p id="modal-bio" class="text-indigo-700 leading-relaxed italic mb-4"></p>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button id="listen-advice-btn" class="flex items-center px-4 py-2 bg-pink-500 text-white font-semibold rounded-full shadow-lg hover:bg-pink-600 transition duration-200 disabled:bg-pink-300 text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H5a2 2 0 01-2-2V9a2 2 0 012-2h.586l4.707-4.707A1 1 0 0112 4v16a1 1 0 01-1.707.707L5.586 15z"></path></svg>
+                            <span id="tts-button-text">Listen to Advice</span>
+                        </button>
+                        <audio id="audio-player" controls class="hidden w-full"></audio>
+                    </div>
+                    <p id="tts-error-message" class="text-red-500 text-sm mt-2 hidden">Error generating audio.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Column 1: Academic Stats, Recommenders, & Activities/Leadership -->
+                    <div>
+                        <!-- Academic Heading -->
+                        <h3 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Academic</h3>
+
+                        <!-- Stats (Header deleted, data kept) -->
+                        <div class="bg-gray-50 p-4 rounded-lg shadow-inner mb-6">
+                            <p class="text-sm text-gray-700"><strong class="w-28 inline-block">GPA: (W):</strong> <span id="modal-gpa-w" class="font-medium"></span></p>
+                            <p class="text-sm text-gray-700"><strong class="w-28 inline-block">SAT:</strong> <span id="modal-sat"></span></p>
+                            <p class="text-sm text-gray-700"><strong class="w-28 inline-block">ACT:</strong> <span id="modal-act"></span></p>
+                        </div>
+                        
+                        <!-- Recommenders (MOVED HERE, BLACK HEADER) -->
+                        <h3 class="text-xl font-bold text-gray-900 border-b pb-2 mb-4 mt-8">Recommenders</h3>
+                        <div class="bg-blue-50 p-4 rounded-lg shadow-inner mb-6">
+                            <ul id="modal-recommenders" class="space-y-2 text-gray-700">
+                                <!-- Recommender list injected here -->
+                            </ul>
+                        </div>
+
+                        <!-- Activities/Leadership -->
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Activities/Leadership</h3>
+                            <ul id="modal-extracurriculars" class="list-disc list-inside space-y-1 text-gray-600 ml-4 mb-8"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: School Experience -->
+                    <div>
+                        <!-- Current School Experience (MOVED HERE) -->
+                        <h3 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Current School Experience</h3>
+                        
+                        <!-- Experience Star Ratings -->
+                        <div id="modal-experience" class="space-y-3 bg-gray-50 p-4 rounded-lg shadow-inner mb-6">
+                            <!-- Star ratings injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Arrow Button -->
+            <button id="next-profile-btn" onclick="showNextProfile(event)" class="nav-button right-4 lg:right-8">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase components (needed for auth context)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL VARIABLES (FROM CANVAS ENVIRONMENT) ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const apiKey = ""; // API key is left empty as per instructions
+
+        // --- GLOBAL STATE & DOM ELEMENTS ---
+        window.currentClassYear = '2026'; // Default to newest class year
+        window.filteredProfiles = []; // Store the currently displayed profiles for filtering and navigation
+        let currentProfileIndex = -1;
+        const grid = document.getElementById('profile-grid');
+        const modalOverlay = document.getElementById('profile-modal-overlay');
+        const modalContent = document.getElementById('profile-modal-content');
+        const majorFilterSelect = document.getElementById('major-filter');
+        const collegeFilterSelect = document.getElementById('college-filter');
+
+        // --- MOCK PROFILE DATA (Updated for new fields and GPA format) ---
+        const alumniData = {
+            '2026': [
+                {
+                    id: 9, name: "Emily Perez", college: "Bryn Mawr College", major: "Political Science",
+                    image: "https://placehold.co/100x100/A0522D/FFFFFF?text=EP",
+                    bio: "Emily is studying political theory and constitutional law. She is heavily involved in campus activism and debate.",
+                    advice: "Be authentic! Don't try to guess what the admissions officers want to hear. Write about what truly matters to you.",
+                    stats: { gpa_w: '3.7', sat: '1380', act: 'N/A' },
+                    recommenders: [
+                        { name: "Ms. Harrison", relation: "AP History Teacher" },
+                        { name: "Mr. Jones", relation: "Debate Coach" }
+                    ],
+                    extracurriculars: ['Mock Trial President', 'Debate Team', 'Student Advocacy Group'],
+                    experience: { food: 3, weather: 4, rigor: 4, overall: 4 },
+                    socials: { linkedin: "emily-perez-polisci", github: "", other: "https://twitter.com/emilypolitics" } 
+                }
+            ],
+            '2025': [
+                {
+                    id: 8, name: "Kyle Nguyen", college: "Princeton University", major: "Electrical Engineering",
+                    image: "https://placehold.co/100x100/9370DB/000000?text=KN",
+                    bio: "Kyle is focused on circuit design and renewable energy systems. He secured an internship at a tech firm the summer after his freshman year.",
+                    advice: "Show passion and genuine curiosity in your applications. Colleges look for students who will contribute uniquely, not just academically.",
+                    stats: { gpa_w: '4.4', sat: '1550', act: '34' },
+                    recommenders: [
+                        { name: "Dr. Chen", relation: "AP Physics Teacher" },
+                        { name: "Mrs. Smith", relation: "Science Bowl Advisor" }
+                    ],
+                    extracurriculars: ['Science Bowl Captain', 'Tech Club', 'Volleyball'],
+                    experience: { food: 4.5, weather: 3.5, rigor: 5, overall: 4.5 },
+                    socials: { linkedin: "kyle-nguyen-ee", github: "knguyen-circuits", other: "" } 
+                }
+            ],
+            '2024': [
+                {
+                    id: 1, name: "Avery Chen", college: "California State University", major: "Computer Science",
+                    image: "https://placehold.co/100x100/77DD77/000000?text=AC",
+                    bio: "Avery is heading to CSU to focus on AI and machine learning. She was heavily involved in the Robotics Club and served as the VP of the STEM Honor Society.",
+                    advice: "Don't be afraid to reach out to current students for an honest view of the campus culture. It's the best way to see if the school is a true fit for you.",
+                    stats: { gpa_w: '4.3', sat: '1450', act: 'N/A' },
+                    recommenders: [
+                        { name: "Mr. Miller", relation: "Math Teacher" },
+                        { name: "Ms. Diaz", relation: "Robotics Advisor" }
+                    ],
+                    extracurriculars: ['Robotics Club VP', 'STEM Honor Society VP', 'Varsity Soccer (4 years)'],
+                    experience: { food: 3.5, weather: 4, rigor: 5, overall: 4.5 },
+                    socials: { linkedin: "avery-chen-ai", github: "avery-c", other: "" } 
+                },
+                {
+                    id: 2, name: "Omar Hassan", college: "University of Texas at Austin", major: "Mechanical Engineering",
+                    image: "https://placehold.co/100x100/ADD8E6/000000?text=OH",
+                    bio: "Omar will pursue Mechanical Engineering with a minor in Aerospace. He is passionate about sustainable design.",
+                    advice: "Start your application essays early—it gives you time to step away and come back with fresh eyes. A rushed essay is easy to spot!",
+                    stats: { gpa_w: '4.5', sat: '1580', act: '35' },
+                    recommenders: [
+                        { name: "Dr. Evans", relation: "AP Calculus Teacher" },
+                        { name: "Coach Riley", relation: "Debate Coach" }
+                    ],
+                    extracurriculars: ['Debate Team Captain (4 years)', 'Model UN', 'Stage Crew Chief'],
+                    experience: { food: 4.5, weather: 4.5, rigor: 5, overall: 5 },
+                    socials: { linkedin: "omar-hassan-eng", github: "", other: "https://personalblog.com/omar" } 
+                },
+                {
+                    id: 3, name: "Jasmine Reed", college: "NYU", major: "Film Production",
+                    image: "https://placehold.co/100x100/F08080/000000?text=JR",
+                    bio: "Jasmine plans to use her creative talents at NYU’s Tisch School of the Arts. Her senior film project was selected for a local student film festival.",
+                    advice: "For creative majors, your portfolio is often more important than your GPA. Spend time perfecting the work you submit!",
+                    stats: { gpa_w: '3.9', sat: 'N/A', act: '30' },
+                    recommenders: [
+                        { name: "Ms. Lopez", relation: "English Teacher" },
+                        { name: "Mr. Kim", relation: "Film Club Advisor" }
+                    ],
+                    extracurriculars: ['Film Club President', 'School Newspaper Editor', 'Student Council'],
+                    experience: { food: 5, weather: 3, rigor: 4, overall: 4.5 },
+                    socials: { linkedin: "", github: "", other: "https://vimeo.com/jasminefilms" }
+                }
+            ],
+            '2023': [
+                {
+                    id: 4, name: "Maria Garcia", college: "Harvard University", major: "Economics",
+                    image: "https://placehold.co/100x100/98FF98/000000?text=MG",
+                    bio: "Maria is thriving in her economics program, focusing on global market trends. She's involved in the campus investment club.",
+                    advice: "The most successful applicants show passion, not just participation. Find one or two things you genuinely love and dive deep!",
+                    stats: { gpa_w: '4.8', sat: '1600', act: '36' },
+                    recommenders: [
+                        { name: "Mr. Wang", relation: "AP Economics Teacher" },
+                        { name: "Principal Johnson", relation: "Administrator" }
+                    ],
+                    extracurriculars: ['Math Team Captain', 'Student Body President', 'Habitat for Humanity'],
+                    experience: { food: 4, weather: 3, rigor: 5, overall: 5 },
+                    socials: { linkedin: "maria-garcia-econ", github: "mg-quant", other: "" }
+                },
+                {
+                    id: 5, name: "David Kim", college: "UC San Diego", major: "Marine Biology",
+                    image: "https://placehold.co/100x100/FFA07A/000000?text=DK",
+                    bio: "David is studying the ocean on the beautiful California coast. He spends his weekends doing field research at the Scripps Institution of Oceanography.",
+                    advice: "Don't be discouraged by rejection. College applications are a lottery. Find a school where you know you'll be happy, even if it wasn't your first choice.",
+                    stats: { gpa_w: '4.2', sat: '1420', act: 'N/A' },
+                    recommenders: [
+                        { name: "Ms. Green", relation: "Biology Teacher" },
+                        { name: "Coach Lee", relation: "Water Polo Coach" }
+                    ],
+                    extracurriculars: ['Ocean Conservation Club', 'Varsity Water Polo', 'Science Olympiad'],
+                    experience: { food: 3, weather: 5, rigor: 4, overall: 4 },
+                    socials: { linkedin: "david-kim-marine", github: "", other: "" }
+                }
+            ],
+            '2022': [
+                {
+                    id: 6, name: "Sarah Lee", college: "University of Washington", major: "Architecture",
+                    image: "https://placehold.co/100x100/ADD8E6/000000?text=SL",
+                    bio: "Sarah is halfway through her architecture degree and loves the collaborative studio environment. She is currently working on designs for sustainable city housing.",
+                    advice: "Your application story needs to be cohesive. Every piece—essays, activities, recommendations—should point to a single, compelling personal narrative.",
+                    stats: { gpa_w: '4.1', sat: '1480', act: '33' },
+                    recommenders: [
+                        { name: "Mrs. Perez", relation: "Art History Teacher" },
+                        { name: "Mr. Adams", relation: "Guidance Counselor" }
+                    ],
+                    extracurriculars: ['Yearbook Design Editor', 'Architecture Club Founder', 'Volunteer Tutor'],
+                    experience: { food: 3.5, weather: 2.5, rigor: 4.5, overall: 4 },
+                    socials: { linkedin: "sarah-lee-arch", github: "", other: "" }
+                },
+                {
+                    id: 7, name: "Ben Carter", college: "Purdue University", major: "Mechanical Engineering",
+                    image: "https://placehold.co/100x100/FFD700/000000?text=BC",
+                    bio: "Ben is specializing in thermal sciences. He recommends spending a lot of time visiting campuses before making a decision.",
+                    advice: "Visit the colleges you are seriously considering. You need to see the environment and feel the atmosphere to know if it's right for you.",
+                    stats: { gpa_w: '4.6', sat: '1520', act: '34' },
+                    recommenders: [
+                        { name: "Dr. Nguyen", relation: "AP Chemistry Teacher" },
+                        { name: "Coach Davies", relation: "Track Coach" }
+                    ],
+                    extracurriculars: ['Robotics Team', 'Varsity Track', 'Investment Club'],
+                    experience: { food: 4, weather: 3, rigor: 5, overall: 4.5 },
+                    socials: { linkedin: "ben-carter-me", github: "bencart", other: "" }
+                }
+            ]
+        };
+
+        // --- TTS & STAR UTILITIES (Unchanged) ---
+
+        /** Converts Base64 string to ArrayBuffer. */
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        /** Converts PCM audio data to a WAV Blob. */
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1;
+            const bytesPerSample = 2; // 16-bit PCM
+            const byteRate = numChannels * sampleRate * bytesPerSample;
+            const blockAlign = numChannels * bytesPerSample;
+
+            const buffer = new ArrayBuffer(44 + pcm16.length * bytesPerSample);
+            const view = new DataView(buffer);
+
+            // RIFF chunk descriptor
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * bytesPerSample, true); // ChunkSize
+            writeString(view, 8, 'WAVE');
+
+            // FMT sub-chunk
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
+            view.setUint16(20, 1, true);  // AudioFormat (1 for PCM)
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true); // BitsPerSample (16)
+
+            // Data sub-chunk
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.length * bytesPerSample, true); // Subchunk2Size
+
+            // Write the PCM data
+            let offset = 44;
+            for (let i = 0; i < pcm16.length; i++, offset += bytesPerSample) {
+                view.setInt16(offset, pcm16[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+
+            function writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+        }
+
+        /**
+         * Generates and plays the TTS audio advice.
+         */
+        async function generateAndPlayAdvice(adviceText) {
+            const button = document.getElementById('listen-advice-btn');
+            const audioPlayer = document.getElementById('audio-player');
+            const errorMsg = document.getElementById('tts-error-message');
+            
+            errorMsg.classList.add('hidden');
+            audioPlayer.classList.add('hidden');
+            audioPlayer.pause();
+            audioPlayer.src = ""; // Clear old source
+            
+            const originalButtonText = button.querySelector('#tts-button-text').textContent;
+            button.disabled = true;
+            button.querySelector('#tts-button-text').textContent = 'Generating Audio...';
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const userQuery = `Say in a friendly, encouraging tone: ${adviceText}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Puck" } // Upbeat voice
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            // Implementation of exponential backoff for API calls
+            const MAX_RETRIES = 5;
+            let currentRetry = 0;
+            let response;
+
+            while (currentRetry < MAX_RETRIES) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429 || response.status >= 500) {
+                        // Rate limit or server error - retry
+                        currentRetry++;
+                        const delay = Math.pow(2, currentRetry) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    }
+                    break; // Exit loop on success or non-retriable error
+
+                } catch (error) {
+                    if (currentRetry === MAX_RETRIES - 1) {
+                        throw error; // Re-throw the error on the final attempt
+                    }
+                    currentRetry++;
+                    const delay = Math.pow(2, currentRetry) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            
+            // Check if we exhausted retries without a successful response
+            if (!response || !response.ok) {
+                // Restore button text and re-enable it on error
+                button.querySelector('#tts-button-text').textContent = originalButtonText;
+                button.disabled = false;
+                errorMsg.textContent = "Failed to get response after multiple retries.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    
+                    audioPlayer.src = URL.createObjectURL(wavBlob);
+                    audioPlayer.classList.remove('hidden');
+                    audioPlayer.play();
+                    button.querySelector('#tts-button-text').textContent = 'Playback Ready';
+                } else {
+                    throw new Error("No audio data returned from API.");
+                }
+            } catch (error) {
+                console.error("TTS Error:", error);
+                errorMsg.textContent = `Error: ${error.message}`;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                button.disabled = false;
+                if(button.querySelector('#tts-button-text').textContent === 'Generating Audio...') {
+                    button.querySelector('#tts-button-text').textContent = originalButtonText;
+                }
+            }
+        }
+        
+        /**
+         * Generates an SVG string for a star rating.
+         */
+        function renderStars(rating) {
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                let colorClass = 'text-gray-300'; 
+                if (i <= Math.floor(rating)) {
+                    colorClass = 'text-yellow-400'; 
+                } else if (i === Math.ceil(rating) && (rating % 1 !== 0)) {
+                    // This logic handles half stars visually by checking the rating value
+                    if (rating === i - 0.5) {
+                         colorClass = 'text-yellow-400';
+                    } else {
+                        colorClass = 'text-gray-300';
+                    }
+                }
+
+                const starSvg = `
+                    <svg class="w-5 h-5 ${colorClass} inline-block" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.817 2.042a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.817-2.042a1 1 0 00-1.175 0l-2.817 2.042c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                `;
+                starsHtml += starSvg;
+            }
+            return starsHtml;
+        }
+        
+        /**
+         * Renders the star rating SVGs for a specific experience item.
+         */
+        function renderExperienceItem(title, rating) {
+            const starHtml = renderStars(rating);
+            return `
+                <div class="flex justify-between items-center py-2 border-b last:border-b-0">
+                    <span class="font-medium text-gray-700">${title}:</span>
+                    <div>${starHtml} <span class="text-sm font-bold text-yellow-600 ml-2">(${rating})</span></div>
+                </div>
+            `;
+        }
+
+        // --- FILTERING & GRID FUNCTIONS (Unchanged) ---
+
+        /**
+         * Extracts unique majors and colleges from the current year's data and populates the filter dropdowns.
+         */
+        function populateFilters(year) {
+            const profiles = alumniData[year] || [];
+            const majors = new Set();
+            const colleges = new Set();
+
+            profiles.forEach(p => {
+                majors.add(p.major);
+                colleges.add(p.college);
+            });
+
+            // Populate Major Filter
+            const currentMajor = majorFilterSelect.value;
+            majorFilterSelect.innerHTML = '<option value="">Filter by Major...</option>';
+            [...majors].sort().forEach(major => {
+                const selected = major === currentMajor ? 'selected' : '';
+                majorFilterSelect.innerHTML += `<option value="${major}" ${selected}>${major}</option>`;
+            });
+
+            // Populate College Filter
+            const currentCollege = collegeFilterSelect.value;
+            collegeFilterSelect.innerHTML = '<option value="">Filter by College...</option>';
+            [...colleges].sort().forEach(college => {
+                const selected = college === currentCollege ? 'selected' : '';
+                collegeFilterSelect.innerHTML += `<option value="${college}" ${selected}>${college}</option>`;
+            });
+        }
+        
+        /**
+         * Renders the main grid based on the selected class year and filters.
+         * Made globally accessible via window.renderGrid
+         */
+        window.renderGrid = function(year) {
+            window.currentClassYear = year;
+            const majorFilter = majorFilterSelect.value;
+            const collegeFilter = collegeFilterSelect.value;
+            const allProfilesForYear = alumniData[year] || [];
+            
+            // 1. Populate filters based on ALL profiles for the year (so no filter options disappear)
+            populateFilters(year);
+
+            // 2. Apply filters
+            window.filteredProfiles = allProfilesForYear.filter(p => {
+                const majorMatch = !majorFilter || p.major === majorFilter;
+                const collegeMatch = !collegeFilter || p.college === collegeFilter;
+                return majorMatch && collegeMatch;
+            });
+
+            // 3. Render cards
+            grid.innerHTML = window.filteredProfiles.map(createProfileCard).join('');
+            
+            // Show/Hide no results message
+            const noResults = document.getElementById('no-results-message');
+            if (window.filteredProfiles.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+
+            // 4. Re-attach click listeners
+            document.querySelectorAll('.profile-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    const profile = window.filteredProfiles.find(p => p.id === id);
+                    const index = window.filteredProfiles.findIndex(p => p.id === id);
+                    if (profile) {
+                        displayProfile(profile, index);
+                    }
+                });
+            });
+
+            // 5. Update tab styling
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                if (btn.getAttribute('data-year') === year) {
+                    btn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                    btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                }
+            });
+        }
+        
+        /**
+         * Generates the HTML for a single profile card.
+         */
+        function createProfileCard(profile) {
+            return `
+                <div 
+                    class="profile-card bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.03] cursor-pointer border-t-8 border-indigo-600/70"
+                    data-id="${profile.id}"
+                >
+                    <div class="flex items-center space-x-4 mb-4">
+                        <img 
+                            src="${profile.image}" 
+                            onerror="this.onerror=null; this.src='https://placehold.co/100x100/D1E8E2/000000?text=Profile';"
+                            alt="${profile.name}" 
+                            class="w-16 h-16 rounded-full object-cover shadow-md border border-gray-200"
+                        >
+                        <div>
+                            <p class="text-xl font-bold text-gray-900">${profile.name}</p>
+                            <p class="text-sm text-indigo-700 font-medium">${profile.college}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1 text-sm">
+                        <p class="text-gray-600"><strong>Major:</strong> <span class="text-pink-600 font-medium">${profile.major}</span></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Helper function to create a clickable social media link button with an SVG icon.
+         */
+        function createSocialLink(type, username) {
+            if (!username) return '';
+            let url = '';
+            let icon = '';
+            let color = '';
+
+            if (type === 'linkedin') {
+                url = `https://www.linkedin.com/in/${username}`;
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22.23 0H1.77C.79 0 0 .77 0 1.73V22.27C0 23.23.79 24 1.77 24H22.23C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0zM7.18 20.35H3.61V8.65H7.18V20.35zM5.39 7.18c-1.16 0-1.89-.78-1.89-1.76 0-.96.7-1.74 1.85-1.74 1.15 0 1.9.78 1.9 1.74 0 .98-.74 1.76-1.86 1.76zm13.19 13.17H16.8V14.12c0-1.48-.52-2.48-1.85-2.48-1 0-1.58.68-1.85 1.34v6.62H9.55V8.65h3.33v1.44c.45-.7.96-1.28 2.01-1.28 2.72 0 4.75 1.78 4.75 5.61v6.07z"/></svg>`;
+                color = 'bg-blue-600 hover:bg-blue-700';
+            } else if (type === 'github') {
+                url = `https://github.com/${username}`;
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.8 8.21 11.38.6.11.82-.26.82-.57V20.3c-3.33.72-4.04-1.61-4.04-1.61-.54-1.37-1.32-1.74-1.32-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.59-2.66-.3-5.46-1.33-5.46-5.92 0-1.3.46-2.36 1.23-3.2-.12-.3-.54-1.52.12-3.18 0 0 1-.32 3.3.47 1.05-.29 2.16-.44 3.28-.44s2.23.15 3.28.44c2.3-1.8 3.3-.47 3.3-.47.66 1.66.24 2.88.12 3.18.78.84 1.23 1.9 1.23 3.2 0 4.6-2.8 5.6-5.46 5.92.42.36.81 1.09.81 2.2V23.7c0 .31.22.68.82.57C20.565 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>`;
+                color = 'bg-gray-800 hover:bg-gray-900';
+            } else if (type === 'other') {
+                url = username;
+                // Link Icon
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>`;
+                color = 'bg-pink-500 hover:bg-pink-600';
+            }
+            
+            return `<a href="${url}" target="_blank" class="p-2 ${color} text-white rounded-full transition duration-150 transform hover:scale-105 shadow-md flex items-center justify-center" aria-label="${type} profile">${icon}</a>`;
+        }
+
+        /**
+         * Populates the modal with the selected profile's data.
+         */
+        function displayProfile(profile, index) {
+            currentProfileIndex = index;
+
+            // Reset TTS
+            document.getElementById('audio-player').classList.add('hidden');
+            document.getElementById('audio-player').pause();
+            document.getElementById('audio-player').src = "";
+            document.getElementById('tts-button-text').textContent = 'Listen to Advice';
+            document.getElementById('listen-advice-btn').disabled = false;
+            document.getElementById('tts-error-message').classList.add('hidden');
+
+            // 1. Remove 'show' class to reset transition state
+            modalContent.classList.remove('show');
+
+            // 2. Populate the modal content
+            document.getElementById('modal-image').src = profile.image;
+            document.getElementById('modal-image').alt = profile.name;
+            document.getElementById('modal-name').textContent = profile.name;
+            document.getElementById('modal-college').textContent = `${profile.college} (Class of ${window.currentClassYear})`;
+            document.getElementById('modal-major').textContent = `Major: ${profile.major}`;
+            
+            // Advice (New Top Section)
+            document.getElementById('modal-bio').textContent = profile.advice; 
+
+            // Populate Socials (Connect with Alumni) - MOVED NEXT TO NAME
+            const socialContainer = document.getElementById('social-links-container');
+            socialContainer.innerHTML = createSocialLink('linkedin', profile.socials.linkedin) +
+                                        createSocialLink('github', profile.socials.github) +
+                                        createSocialLink('other', profile.socials.other);
+
+            // Populate Stats (Header deleted, data remains)
+            document.getElementById('modal-gpa-w').textContent = profile.stats.gpa_w || 'N/A';
+            document.getElementById('modal-sat').textContent = profile.stats.sat;
+            document.getElementById('modal-act').textContent = profile.stats.act;
+
+            // Populate Recommenders (Now in Column 1, Black Header)
+            const recommendersContainer = document.getElementById('modal-recommenders');
+            recommendersContainer.innerHTML = profile.recommenders.map(r => 
+                `<li class="flex items-start space-x-2">
+                    <svg class="w-5 h-5 text-indigo-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    <div class="leading-snug">
+                        <strong class="font-semibold">${r.name}</strong> 
+                        <span class="text-sm block text-gray-500">(${r.relation})</span>
+                    </div>
+                </li>`
+            ).join('');
+            if (profile.recommenders.length === 0) {
+                recommendersContainer.innerHTML = `<li class="text-gray-500 italic">No recommenders specified.</li>`;
+            }
+
+            // Populate Activities/Leadership
+            document.getElementById('modal-extracurriculars').innerHTML = profile.extracurriculars.map(e => 
+                `<li>${e}</li>`
+            ).join('');
+
+            // Populate Experience Ratings
+            const experienceContainer = document.getElementById('modal-experience');
+            experienceContainer.innerHTML = [
+                renderExperienceItem('Campus Food', profile.experience.food),
+                renderExperienceItem('Weather', profile.experience.weather),
+                renderExperienceItem('Academic Rigor', profile.experience.rigor),
+                renderExperienceItem('Overall Experience', profile.experience.overall),
+            ].join('');
+            
+
+            // Set up TTS button action
+            const ttsButton = document.getElementById('listen-advice-btn');
+            ttsButton.onclick = (e) => {
+                e.stopPropagation();
+                generateAndPlayAdvice(profile.advice);
+            };
+
+            // 3. Show modal with animation
+            modalOverlay.style.display = 'flex';
+            requestAnimationFrame(() => {
+                modalContent.classList.add('show');
+            });
+            document.body.style.overflow = 'hidden';
+        }
+
+
+        // --- NAVIGATION FUNCTIONS (Unchanged) ---
+
+        /**
+         * Returns the current array of profiles visible in the grid.
+         */
+        window.getFilteredProfiles = function() {
+            return window.filteredProfiles;
+        }
+
+        /**
+         * Made globally accessible via window.showNextProfile
+         */
+        window.showNextProfile = function(event) {
+            if (event) event.stopPropagation(); 
+            const profiles = window.getFilteredProfiles();
+            if (profiles.length === 0) return;
+            let nextIndex = currentProfileIndex + 1;
+            if (nextIndex >= profiles.length) {
+                nextIndex = 0;
+            }
+            displayProfile(profiles[nextIndex], nextIndex);
+        }
+
+        /**
+         * Made globally accessible via window.showPreviousProfile
+         */
+        window.showPreviousProfile = function(event) {
+            if (event) event.stopPropagation();
+            const profiles = window.getFilteredProfiles();
+            if (profiles.length === 0) return;
+            let prevIndex = currentProfileIndex - 1;
+            if (prevIndex < 0) {
+                prevIndex = profiles.length - 1;
+            }
+            displayProfile(profiles[prevIndex], prevIndex);
+        }
+
+        /**
+         * Made globally accessible via window.closeModal
+         */
+        window.closeModal = function(event) {
+            // Only close if clicking the backdrop or the close button
+            if (event && event.target !== modalOverlay && event.target !== document.querySelector('.modal-content-animated svg')) return;
+
+            modalContent.classList.remove('show');
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+                document.body.style.overflow = '';
+                currentProfileIndex = -1;
+            }, 400); 
+        }
+
+        // --- INITIALIZATION (Unchanged) ---
+        
+        async function initializeAuth() {
+            if (!firebaseConfig) {
+                console.error("Firebase config is missing.");
+                return;
+            }
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                // setLogLevel('debug'); // Uncomment for detailed Firebase logs
+
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                console.log("Firebase Auth successful. User:", auth.currentUser.uid);
+            } catch (error) {
+                console.error("Firebase Auth failed:", error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeAuth();
+            
+            // 1. Render Class Year Tabs
+            const tabContainer = document.getElementById('class-year-tabs');
+            // Sort years in reverse order (newest first)
+            const years = Object.keys(alumniData).sort((a, b) => b - a); 
+            
+            tabContainer.innerHTML = years.map(year => `
+                <button 
+                    class="tab-button px-4 py-2 font-bold rounded-lg transition duration-200 text-sm sm:text-base" 
+                    data-year="${year}"
+                    onclick="renderGrid('${year}')"
+                >
+                    Class of ${year}
+                </button>
+            `).join('');
+
+            // 2. Render default year (latest year)
+            window.renderGrid(years[0]);
+
+            // 3. Add keyboard listener for navigation and closing
+            document.addEventListener('keydown', (e) => {
+                if (modalOverlay.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') {
+                        showNextProfile();
+                    } else if (e.key === 'ArrowLeft') {
+                        showPreviousProfile();
+                    } else if (e.key === 'Escape') {
+                        closeModal();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

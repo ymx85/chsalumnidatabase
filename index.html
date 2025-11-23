@@ -102,7 +102,8 @@
             margin-right: 1rem;
             border: 3px solid #bfdbfe; 
             overflow: hidden; 
-            aspect-ratio: 1/1; /* CRUCIAL: Ensures perfect square for image containment */
+            aspect-ratio: 1/1;
+            position: relative;
         }
         
         .avatar-initials {
@@ -118,6 +119,9 @@
             height: 100%;
             object-fit: cover; 
             object-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         
         /* Star Rating */
@@ -439,7 +443,7 @@
                 advice: "Coming soon!",
                 experience: { "Food": 4.8, "Weather": 3.8, "Rigor": 4, "Overall": 4.5 },
                 experienceDescription: "Food is all-you-can-eat buffet style with new menus every day, 15 options per breakfast, lunch, dinner. Best cookies I've ever had.\n\nWeather: The most gorgeous fall you will ever see, but the winters are brutal. Rains often.\n\nRigor: Three course quarters, so very fast pace. Easy to get behind and exams are tough. B+ enforced medians for Econ and Gov classes.\n\nOverall: Great experience. Smaller than CHS, so very easy to make friends and run into people you know. Very relaxing campus and everywhere is a maximum 10 minute walk.",
-                classRecommendations: "I would recommend all students, not just history majors to take APUSH."
+                classRecommendations: null
             },
             {
                 id: 2,
@@ -486,7 +490,7 @@
                 advice: "Just be yourself and put things you are genuinely interested in. I definitely agree that colleges/admissions officers can tell when you're truly passionate about something versus just doing it to look good. Basic tips: fill up word count and proofread a ton (get your friends, teachers, anyone you can get to look over it too) also apply obviously. Definitely try to form close bonds with teachers early on and have an idea of who you want to write your rec letters, because asking them last minute is really bad, and you need to give them stuff to write about. Also have some recurring themes, for me it was about how I want to help the community around me, whether it's by tutoring, hosting competitions, or volunteering and spreading my culture. Lastly, don't forget that everyone ends up where they belong in the end, i'm mainly speaking for myself but I think we all share similar sentiments that we feel like we really belong at our school and have a lot of fun, so don't stress too much, and remember to have fun sometimes.",
                 experience: { "Food": 3.5, "Weather": 4, "Overall": 4.5 },
                 experienceDescription: null,
-                classRecommendations: "I recommend taking Work-based Learning for CS applicants to get research experience."
+                classRecommendations: "I recommend everyone to take APUSH and for aspiring CS majors to take AP CSA."
             },
             {
                 id: 4,

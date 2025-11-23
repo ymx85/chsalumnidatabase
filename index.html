@@ -16,8 +16,8 @@
         }
 
         /* Primary Theme Colors (Blue & White) */
-        .color-primary { background-color: #2563eb; } /* Blue-600 */
-        .color-primary-text { color: #2563eb; }
+        .color-primary { background-color: #1e40af; } /* Blue-800 */
+        .color-primary-text { color: #1e40af; }
         .color-secondary { background-color: #bfdbfe; } /* Light Blue-200 */
 
         /* Card Grid Layout */
@@ -34,24 +34,65 @@
         .person-card {
             background: #ffffff;
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 0;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             cursor: pointer;
             transition: 0.2s ease;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            border-top: 10px solid #2563eb; 
+            align-items: stretch;
+            overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
         }
         .person-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.2);
         }
+        
+        /* Card Avatar Header - Large */
+        .card-avatar-header {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-avatar-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
 
-        /* Avatar Styling */
+        /* --- Sequential Card Animation --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Applied to each card via JS */
+        .animated-card {
+            opacity: 0; 
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        /* Avatar Styling (Fixed Skewing) */
         .avatar {
-            /* Shared styles for both image and initials */
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -60,7 +101,8 @@
             flex-shrink: 0;
             margin-right: 1rem;
             border: 3px solid #bfdbfe; 
-            overflow: hidden; /* Important for images */
+            overflow: hidden; 
+            aspect-ratio: 1/1; /* CRUCIAL: Ensures perfect square for image containment */
         }
         
         .avatar-initials {
@@ -70,10 +112,12 @@
             font-size: 1.5rem;
         }
 
+        /* Ensure inner image fills the square container without distortion */
         .avatar-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; 
+            object-position: center;
         }
         
         /* Star Rating */
@@ -82,18 +126,19 @@
             transition: transform 0.1s;
         }
 
-        /* Modal specific styles */
+        /* --- Modal Overlays (Welcome and Profile) --- */
         .modal-overlay {
             position: fixed;
             inset: 0;
             background-color: rgba(0, 0, 0, 0.75);
-            display: none; 
+            display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
             padding: 1rem;
             z-index: 1000;
         }
 
+        /* Modal show/hide animation */
         .modal-show .modal-content-animated {
             transform: scale(1);
             opacity: 1;
@@ -106,29 +151,20 @@
             position: relative;
             width: 100%;
             max-width: 1000px;
-            max-height: 90vh; /* Constrain height */
-            overflow-y: auto; /* Allow scrolling inside */
+            max-height: 90vh; 
+            overflow-y: auto; 
         }
         
         .chs-logo {
             height: 70px;
             width: auto;
             margin-bottom: 10px;
+            cursor: pointer; /* Added for manual popup trigger */
         }
 
-        /* Social Icons */
-        .social-icon {
-            color: #2563eb; 
-            transition: color 0.2s;
-        }
-        .social-icon:hover {
-            color: #1d4ed8; 
-            transform: scale(1.1);
-        }
-
-        /* Styling for the listen button */
+        /* Styling for the listen button - Blue to match headers */
         #listen-button {
-            background-color: #ec4899; /* Pink-500 */
+            background-color: #1e40af; /* Blue-800 to match headers */
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 9999px;
@@ -140,15 +176,20 @@
             margin-top: 1rem;
         }
         #listen-button:hover {
-            background-color: #db2777; /* Pink-600 */
+            background-color: #1e3a8a; /* Blue-900 */
         }
 
         /* Customizing border for the grouped sections (like in the image) */
         .section-group {
-            border: 1px solid #bfdbfe; /* Light blue border */
-            border-radius: 0.75rem;
-            padding: 1.5rem;
+            border: none;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0;
+            padding: 1.5rem 0;
             background-color: white;
+        }
+        
+        .section-group:last-child {
+            border-bottom: none;
         }
 
         /* Custom styling for the "Advice" box to mimic the image */
@@ -162,7 +203,7 @@
         /* Modal grid for two main columns (Equal width) */
         @media (min-width: 1024px) {
             .modal-main-grid {
-                grid-template-columns: 1fr 1fr; /* Equal columns */
+                grid-template-columns: 1fr 1fr; 
             }
         }
         
@@ -173,7 +214,7 @@
             transform: translateY(-50%);
             z-index: 1010;
             color: white;
-            background-color: rgba(37, 99, 235, 0.8); /* Blue-600 with opacity */
+            background-color: rgba(30, 64, 175, 0.8); /* Blue-800 */
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -185,7 +226,7 @@
         }
         .modal-nav-button:hover {
             opacity: 1;
-            background-color: #1d4ed8; /* Blue-700 */
+            background-color: #1e3a8a; /* Blue-900 */
         }
         #nav-prev { left: 1rem; }
         #nav-next { right: 1rem; }
@@ -194,20 +235,22 @@
         .modal-nav-button:disabled {
             opacity: 0.3;
             cursor: not-allowed;
-            background-color: rgba(37, 99, 235, 0.5);
+            background-color: rgba(30, 64, 175, 0.5);
         }
-
+        
     </style>
 </head>
 <body>
 
     <header class="text-center py-8 shadow-md bg-white sticky top-0 z-50">
+        <!-- CHS Logo (made clickable to re-open the welcome modal) -->
         <img src="https://resources.finalsite.net/images/f_auto,q_auto/v1668797119/ccsk12inus/awfkuopbc2f6uupyira9/CarmelHighSchoolLogo.png" 
              alt="CHS Greyhound Logo" 
              class="chs-logo mx-auto" 
-             onerror="this.onerror=null; this.src='https://placehold.co/140x70/2563EB/ffffff?text=CHS+Logo'">
+             onerror="this.onerror=null; this.src='https://placehold.co/140x70/2563EB/ffffff?text=CHS+Logo'"
+             onclick="showWelcomeModal()">
         
-        <h1 class="text-3xl font-extrabold text-blue-800">CHS College Application Database</h1>
+        <h1 class="text-3xl font-extrabold text-blue-800">CHS College Resource Database</h1>
         
         <p class="text-gray-500 mt-1 italic text-sm">Real data from CHS Alumni to help guide your application journey.</p>
 
@@ -235,8 +278,25 @@
         <!-- Alumni cards will be dynamically inserted here -->
     </div>
 
-
-    <!-- Profile Modal -->
+    <!-- ---------------------------------------------------- -->
+    <!-- WELCOME MODAL (Gold with Emoji) - REQUIRED POPUP -->
+    <!-- ---------------------------------------------------- -->
+    <div id="welcome-modal" class="modal-overlay">
+        <!-- Using Tailwind classes for the gold/amber theme -->
+        <div class="bg-amber-100 rounded-xl shadow-2xl p-6 md:p-8 modal-content-animated border-t-8 border-amber-600 w-full max-w-sm sm:max-w-md">
+            <h2 class="text-2xl font-extrabold mb-4 text-center text-amber-800">A Thank You to Our Alumni <span role="img" aria-label="confetti">🎉</span></h2>
+            <p class="text-gray-700 leading-relaxed mb-6 text-center">
+                This project exists thanks to the amazing support of CHS alumni. Thank you to everyone who shared their stats, stories, and advice—and for continuing to guide future Greyhounds for years to come.
+            </p>
+            <button onclick="closeWelcomeModal()" class="w-full bg-amber-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-amber-600 transition duration-150">
+                Continue to Database
+            </button>
+        </div>
+    </div>
+    
+    <!-- ---------------------------------------------------- -->
+    <!-- PROFILE MODAL (Existing) -->
+    <!-- ---------------------------------------------------- -->
     <div id="person-modal" class="modal-overlay">
         
         <!-- Navigation Arrows (Outside Modal Content for full height) -->
@@ -263,69 +323,84 @@
             </div>
 
             <!-- Modal Content Body -->
-            <!-- Layout: Two equal columns -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 modal-main-grid">
+            <div class="space-y-6">
                 
-                <!-- LEFT COLUMN: Stats, Recommenders, Activities/Leadership -->
-                <div class="space-y-6">
-
-                    <!-- Section 1: Academic Stats -->
-                    <div class="section-group">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex items-center"><i class="fas fa-chart-bar mr-2 text-blue-500"></i> Stats</h3>
-                        <div id="modal-stats" class="text-gray-700 space-y-1">
+                <!-- TOP SECTION: Three Column Grid for Stats/Recommenders/Activities -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" style="border-bottom: 1px solid #e5e7eb;">
+                    
+                    <!-- Column 1: Academics -->
+                    <div class="section-group" style="border-right: 1px solid #f3f4f6; border-bottom: none;">
+                        <h3 class="text-xl font-bold text-blue-800 mb-3 pb-2 flex items-center">
+                            <i class="fas fa-chart-bar mr-2"></i> Academics
+                        </h3>
+                        <div id="modal-stats" class="text-gray-700 space-y-2">
                             <!-- Stats injected here -->
                         </div>
-                    </div>
-
-                    <!-- Section 2: Recommenders -->
-                    <div class="section-group">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex items-center"><i class="fas fa-user-tie mr-2 text-blue-500"></i> Recommenders</h3>
-                        <ul id="modal-recommenders" class="list-none text-gray-700 space-y-3">
+                        
+                        <!-- Class Recommendations -->
+                        <div id="modal-class-recommendations" class="mt-4 p-3 bg-gray-100 rounded-lg text-sm text-gray-600 italic hidden">
+                            <!-- Class recommendations injected here -->
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-blue-800 mb-3 pb-2 mt-6 flex items-center">
+                            <i class="fas fa-user-tie mr-2"></i> Recommenders
+                        </h3>
+                        <ul id="modal-recommenders" class="list-none text-gray-700 space-y-2">
                             <!-- Recommenders injected here -->
                         </ul>
                     </div>
 
-                    <!-- Section 3: Activities & Leadership -->
-                    <div class="section-group">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex items-center"><i class="fas fa-running mr-2 text-blue-500"></i> Activities/Leadership</h3>
-                        <ul id="modal-activities" class="list-disc list-inside text-gray-700 space-y-1 pl-4">
+                    <!-- Column 2: Activities & Leadership -->
+                    <div class="section-group" style="border-right: 1px solid #f3f4f6; border-bottom: none;">
+                        <h3 class="text-xl font-bold text-blue-800 mb-3 pb-2 flex items-center">
+                            <i class="fas fa-running mr-2"></i> Activities & Leadership
+                        </h3>
+                        <ul id="modal-activities" class="list-none text-gray-700 space-y-2">
                             <!-- Activities injected here -->
                         </ul>
                     </div>
-                </div>
 
-                <!-- RIGHT COLUMN: Advice, Experience, Connect -->
-                <div class="space-y-6">
-
-                    <!-- Section A: Advice for Applying (TOP of column) -->
-                    <div class="advice-box">
-                        <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center"><i class="fas fa-comment-dots mr-2"></i> Advice for Applying</h3>
-                        <p id="modal-advice" class="text-gray-700 leading-relaxed italic"></p>
-                        <!-- Voice Memo Placeholder Button -->
-                        <button id="listen-button" onclick="alert('Simulating voice playback of application advice...')">
-                            <i class="fas fa-volume-up mr-2"></i> Listen to Advice
-                        </button>
-                    </div>
-                    
-                    <!-- Section B: Current School Experience (Star Ratings) -->
-                    <div class="section-group">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2 flex items-center"><i class="fas fa-star mr-2 text-blue-500"></i> Current School Experience</h3>
-                        
+                    <!-- Column 3: Campus Experience -->
+                    <div class="section-group" style="border-bottom: none;">
+                        <h3 class="text-xl font-bold text-blue-800 mb-3 pb-2 flex items-center">
+                            <i class="fas fa-school mr-2"></i> Campus Experience
+                        </h3>
                         <div id="modal-experience-ratings" class="space-y-3">
                             <!-- Ratings injected here -->
                         </div>
-                    </div>
-
-                    <!-- Section C: Connect with Alumni (Socials) -->
-                    <div class="section-group">
-                        <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center"><i class="fas fa-share-alt mr-2"></i> Connect with Alumni</h3>
-                        <div class="flex space-x-6 justify-center">
-                            <a id="modal-linkedin" target="_blank" class="text-4xl hover:text-blue-700 transition-colors" title="Connect on LinkedIn"><i class="fab fa-linkedin"></i></a>
-                            <a id="modal-instagram" target="_blank" class="text-4xl hover:text-pink-600 transition-colors" title="Follow on Instagram"><i class="fab fa-instagram"></i></a>
+                        
+                        <!-- Experience Description if available -->
+                        <div id="modal-experience-description" class="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 italic hidden">
+                            <!-- Description injected here -->
                         </div>
                     </div>
-
                 </div>
+
+                <!-- BOTTOM SECTION: Advice for Applying -->
+                <div class="section-group">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xl font-bold text-blue-800 flex items-center">
+                            <i class="fas fa-comment-dots mr-2"></i> Advice for Applying
+                        </h3>
+                        <!-- Voice Memo Placeholder Button (Blue) -->
+                        <button id="listen-button" onclick="alert('Voice memo feature coming soon!')">
+                            <i class="fas fa-volume-up mr-2"></i> Listen to Advice
+                        </button>
+                    </div>
+                    <p id="modal-advice" class="text-gray-700 leading-relaxed"></p>
+                </div>
+
+                <!-- Connect with Alumni (Socials) -->
+                <div class="section-group text-center">
+                    <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center justify-center">
+                        <i class="fas fa-share-alt mr-2"></i> Connect with Alumni
+                    </h3>
+                    <div class="flex space-x-6 justify-center">
+                        <a id="modal-linkedin" target="_blank" class="text-4xl hover:text-blue-700 transition-colors" title="Connect on LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a id="modal-instagram" target="_blank" class="text-4xl hover:text-pink-600 transition-colors" title="Follow on Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -333,83 +408,115 @@
     <!-- JavaScript for Data, Filters, and Interactivity -->
     <script>
         // --- DATA STRUCTURE: Detailed College Application Data ---
-        // Profile pictures now support a URL via avatarUrl. If avatarUrl is null, it falls back to initials/avatarColor.
         const alumniData = [
             {
                 id: 1,
-                name: "Sarah Chen",
-                avatarColor: "#0077b6",
-                avatarUrl: "https://placehold.co/64x64/0077b6/white?text=SC", // Placeholder: replace with actual URL
+                name: "Royce Brown",
+                avatarColor: "#00693E",
+                avatarUrl: "https://placehold.co/64x64/00693E/white?text=RB", 
                 chsClassYear: 2024,
-                stats: { gpa: 4.5, act: 35, sat: null }, // ACT used
-                starRating: 5, 
-                socials: { linkedin: "https://www.linkedin.com/in/sarahchenmock", instagram: "https://www.instagram.com/sarahchenmock" },
-                attending: { name: "Purdue University", major: "Aerospace Engineering" },
-                appliedColleges: [
-                    { name: "Purdue University", major: "Aerospace Engineering", status: "Accepted", isAttending: true },
-                    { name: "Georgia Tech", major: "Aerospace Engineering", status: "Waitlisted", isAttending: false },
-                    { name: "MIT", major: "Mechanical Engineering", status: "Rejected", isAttending: false },
-                ],
-                recommenders: ["Mr. Smith (AP Physics C)", "Ms. Johnson (AP Lit)", "Coach Davis (Robotics)"],
+                stats: { gpa: 4.68, act: null, sat: 1530 }, 
+                starRating: 4.5, 
+                socials: { linkedin: "https://www.linkedin.com/in/roycebrownmock", instagram: "https://www.instagram.com/roycebrownmock" },
+                attending: { name: "Dartmouth University", major: "Economics & History" },
+                recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Rauch (AP Biology teacher)"],
                 activities: [
-                    "Robotics Club (Lead Engineer, 4 years)",
-                    "Science Olympiad (Captain, 3 years)",
-                    "Varsity Tennis (2 years)",
-                    "Tutoring (Math & Science, 100+ hours)"
+                    "The Distinguished Graduate of 2024 (Valedictorian)",
+                    "4x Scholar Athlete",
+                    "3x Top Scholar",
+                    "Outstanding Senior in Social Studies",
+                    "Eagle Scout",
+                    "HiLite Editor-in-Chief",
+                    "Economics Club Team Captain",
+                    "Varsity Football Tight End & Track",
+                    "Wind Symphony I & Symphony Orchestra First Chair French Horn",
+                    "Rho Kappa",
+                    "Social Studies Peer Tutor Leader",
+                    "Superintendent and Principal Advisory Council",
+                    "GKOM",
+                    "NHS"
                 ],
-                advice: "Focus on deeply engaging in 2-3 activities rather than spreading yourself thin. For STEM, a strong math/science teacher recommendation is crucial. Start essays early and tailor them to each school's mission.",
-                experience: { "Campus Food": 4, "Weather": 3.5, "Academic Rigor": 5, "Overall Experience": 4.5 }
+                advice: "Coming soon!",
+                experience: { "Food": 4.8, "Weather": 3.8, "Rigor": 4, "Overall": 4.5 },
+                experienceDescription: "Food is all-you-can-eat buffet style with new menus every day, 15 options per breakfast, lunch, dinner. Best cookies I've ever had.\n\nWeather: The most gorgeous fall you will ever see, but the winters are brutal. Rains often.\n\nRigor: Three course quarters, so very fast pace. Easy to get behind and exams are tough. B+ enforced medians for Econ and Gov classes.\n\nOverall: Great experience. Smaller than CHS, so very easy to make friends and run into people you know. Very relaxing campus and everywhere is a maximum 10 minute walk.",
+                classRecommendations: "I would recommend all students, not just history majors to take APUSH."
             },
             {
                 id: 2,
-                name: "Marcus Jones",
-                avatarColor: "#1d4ed8",
-                avatarUrl: "https://hilite.org/wp-content/uploads/2017/10/DSC_1052-900x752.jpg", // Placeholder: replace with actual URL
-                chsClassYear: 2023,
-                stats: { gpa: 4.3, act: null, sat: 1480 }, // SAT used
-                starRating: 4, 
-                socials: { linkedin: "https://www.linkedin.com/in/marcusjonesmock", instagram: "https://www.instagram.com/marcusjonesmock" },
-                attending: { name: "University of Michigan", major: "Business" },
-                appliedColleges: [
-                    { name: "Indiana University", major: "Finance", status: "Accepted", isAttending: false },
-                    { name: "University of Michigan", major: "Business", status: "Accepted", isAttending: true },
-                    { name: "Notre Dame", major: "Economics", status: "Rejected", isAttending: false },
-                    { name: "Purdue University", major: "Finance", status: "Accepted", isAttending: false },
-                ],
-                recommenders: ["Mrs. Williams (AP Econ)", "Mr. Chen (AP Stats)", "Advisor (College Counseling)"],
+                name: "Srikrishna Ganesha",
+                avatarColor: "#003262",
+                avatarUrl: "https://placehold.co/64x64/003262/white?text=SG", 
+                chsClassYear: 2024,
+                stats: { gpa: 4.63, act: null, sat: null }, 
+                starRating: 4.6, 
+                socials: { linkedin: "https://www.linkedin.com/in/srikrishnaganeshamock", instagram: "https://www.instagram.com/srikrishnaganeshamock" },
+                attending: { name: "UC Berkeley", major: "Economics" },
+                recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Anderson"],
                 activities: [
-                    "Marching Band (Trumpet Section Lead, 4 years)",
-                    "DECA (State Finalist, 3 years)",
-                    "National Honor Society (Treasurer, 2 years)",
-                    "Part-time Job (Local Restaurant, 15 hrs/week)"
+                    "Published economics research",
+                    "Co-President of Economics Club",
+                    "President of Carmel Esports",
+                    "DECA ICDC Finalist (8th)",
+                    "Carnegie Hall Finalist in Orchestra with tryouts"
                 ],
-                advice: "Show versatility. My essays focused on leadership in band and my experience working. Don't underestimate the importance of your common application activity descriptions. Quality over quantity!",
-                experience: { "Campus Food": 3, "Weather": 4, "Academic Rigor": 4, "Overall Experience": 4 }
+                advice: "Colleges want to see someone who is an actual human and not an academic robot. For UC schools, use \"I statements\" and really detail your personal involvement. They allow for 20 activities so I honestly recommend throwing in some hobbies, because they want to see a genuine person that has a life along with their academics. I didn't get rejected from a single UC but my CommonApp must've been pretty bad because it felt less genuine (I paid for a college application consulting service and it made me feel like I was losing my voice in my prompts and activities. On the other hand, I did the UC ones by myself). For the UC app, make sure to fill up the word count in the activities section and show effort. I had a recurring theme for my essays about helping whatever communities I joined in some way, so maybe that helps. I do think the UC schools are big on community involvement. Also, don't stress too much about the college process because you will be successful no matter what if you have the right mindset. Not a single person that I know still remembers much of these details because college feels so distant from high school, and you learn a lot of life skills and mature a lot.",
+                experience: { "Food": 3.7, "Weather": 4.9, "Rigor": 4.4, "Overall": 4.6 },
+                experienceDescription: null,
+                classRecommendations: null
             },
             {
                 id: 3,
-                name: "Emily Rodriguez",
-                avatarColor: "#38bdf8",
-                avatarUrl: "https://placehold.co/64x64/38bdf8/white?text=ER", // Placeholder: replace with actual URL
-                chsClassYear: 2025,
-                stats: { gpa: 4.6, act: 36, sat: null }, // ACT used
-                starRating: 5, 
-                socials: { linkedin: "https://www.linkedin.com/in/emilyrodriguezmock", instagram: "https://www.instagram.com/emilyrodriguezmock" },
+                name: "Alan Huang",
+                avatarColor: "#8B0000",
+                avatarUrl: "https://hilite.org/wp-content/uploads/2023/08/alan-huang-1200x697.jpg", 
+                chsClassYear: 2024,
+                stats: { gpa: 4.60, act: null, sat: 1590 }, 
+                starRating: 4.5, 
+                socials: { linkedin: "https://www.linkedin.com/in/alanhungmock", instagram: "https://www.instagram.com/alanhungmock" },
                 attending: { name: "Stanford University", major: "Computer Science" },
-                appliedColleges: [
-                    { name: "Stanford University", major: "Computer Science", status: "Accepted", isAttending: true },
-                    { name: "UC Berkeley", major: "EECS", status: "Accepted", isAttending: false },
-                    { name: "Harvard University", major: "Applied Math", status: "Waitlisted", isAttending: false },
-                ],
-                recommenders: ["Dr. Lee (AP Comp Sci)", "Ms. Davis (AP Chem)", "High School Principal (School Rep)"],
+                recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Werkne (AP Stats teacher)", "Mr. McDonough (Counselor)"],
                 activities: [
-                    "Founded Girls Who Code chapter (President, 3 years)",
-                    "Varsity Debate Team (Captain, 4 years)",
-                    "Summer Research Internship (Local University)",
-                    "Peer Mentor Program"
+                    "Computer Science Tutor (volunteer/paid)",
+                    "Founder of Deep Learning Club",
+                    "Create Code Challenge",
+                    "Esports League State Champion",
+                    "American Computer Science League",
+                    "National Chinese Honor Society"
                 ],
-                advice: "Your highest GPA may not be the most important factor. Use your essays to explain *why* your extracurriculars matter and how they connect to your future major. My research experience was key.",
-                experience: { "Campus Food": 4.5, "Weather": 5, "Academic Rigor": 5, "Overall Experience": 5 }
+                advice: "Just be yourself and put things you are genuinely interested in. I definitely agree that colleges/admissions officers can tell when you're truly passionate about something versus just doing it to look good. Basic tips: fill up word count and proofread a ton (get your friends, teachers, anyone you can get to look over it too) also apply obviously. Definitely try to form close bonds with teachers early on and have an idea of who you want to write your rec letters, because asking them last minute is really bad, and you need to give them stuff to write about. Also have some recurring themes, for me it was about how I want to help the community around me, whether it's by tutoring, hosting competitions, or volunteering and spreading my culture. Lastly, don't forget that everyone ends up where they belong in the end, i'm mainly speaking for myself but I think we all share similar sentiments that we feel like we really belong at our school and have a lot of fun, so don't stress too much, and remember to have fun sometimes.",
+                experience: { "Food": 3.5, "Weather": 4, "Overall": 4.5 },
+                experienceDescription: null,
+                classRecommendations: "I recommend taking Work-based Learning for CS applicants to get research experience."
+            },
+            {
+                id: 4,
+                name: "Arjun Purohit",
+                avatarColor: "#003DA5",
+                avatarUrl: "https://hilite.org/wp-content/uploads/2023/08/arjun-purohit-1-1200x697.jpg", 
+                chsClassYear: 2024,
+                stats: { gpa: 4.6, act: null, sat: null }, 
+                starRating: 3.2, 
+                socials: { linkedin: "https://www.linkedin.com/in/arjunpurohitmock", instagram: "https://www.instagram.com/arjunpurohitmock" },
+                attending: { name: "Columbia University", major: "Linguistics & Computer Science" },
+                recommenders: ["Mr. Rauch", "Mrs. Lee (Chinese teacher)"],
+                activities: [
+                    "HiLite Editor",
+                    "Esports League Captain & State Champion",
+                    "Founder of Biology Club",
+                    "Linguistics Club lecturer",
+                    "Linguistics blog",
+                    "Self-taught Japanese",
+                    "Hindi teacher",
+                    "AIME Qualifier",
+                    "SciOly",
+                    "Data science internship",
+                    "Deep Learning Club",
+                    "National Chinese Honor Society"
+                ],
+                advice: "Start on your applications early, it's really nice to have most of your essays done early so you can just proofread closer to the deadline. Don't be afraid to ask for advice, but more importantly, don't be afraid to turn down suggestions if you feel like they don't match your style/voice. Try to tell a story with your essays that highlights your character and your passions, also think about what kind of values the colleges you're applying to value. Columbia, for example, likes people that are worldly and love knowledge for its own sake (you might get a sense of this from Columbia's emphasis on the 'core').",
+                experience: { "Food": 3, "Weather": 3, "Rigor": 3.5 },
+                experienceDescription: null,
+                classRecommendations: null
             }
         ];
         
@@ -438,20 +545,16 @@
             return html;
         }
 
-        // UPDATED: Now supports image URLs or falls back to initials/color
         function createAvatar(name, color, url, size = '64px', fontSize = '1.5rem') {
             const initials = name.split(' ').map(n => n[0]).join('');
             
-            // Set size dynamically for the avatar container
             let containerStyle = `width: ${size}; height: ${size};`;
 
             if (url) {
-                // If a URL is provided, use an img tag inside the avatar div
                 return `<div class="avatar" style="${containerStyle}">
-                            <img src="${url}" alt="${name} profile" class="avatar-img" />
+                            <img src="${url}" alt="${name} profile" class="avatar-img" onerror="this.onerror=null; this.src='https://placehold.co/${parseInt(size)}x${parseInt(size)}/${color.substring(1)}/ffffff?text=${initials}'" />
                         </div>`;
             } else {
-                // Fallback to initials if no URL
                 return `<div class="avatar avatar-initials" style="${containerStyle} background-color: ${color}; font-size: ${fontSize};">${initials}</div>`;
             }
         }
@@ -463,10 +566,8 @@
             const allMajors = new Set();
 
             alumniData.forEach(person => {
-                person.appliedColleges.forEach(college => {
-                    allColleges.add(college.name);
-                    allMajors.add(college.major);
-                });
+                allColleges.add(person.attending.name);
+                allMajors.add(person.attending.major);
             });
 
             const collegeFilter = document.getElementById('college-filter');
@@ -478,7 +579,6 @@
             majorFilter.innerHTML = '<option value="">All Majors</option>' + 
                 Array.from(allMajors).sort().map(m => `<option value="${m}">${m}</option>`).join('');
 
-            // Restore selection if filters were active before
             collegeFilter.value = currentCollegeFilter;
             majorFilter.value = currentMajorFilter;
         }
@@ -489,10 +589,10 @@
 
             activeAlumniList = alumniData.filter(person => {
                 const collegeMatch = currentCollegeFilter === '' || 
-                                     person.appliedColleges.some(c => c.name === currentCollegeFilter);
+                                     person.attending.name === currentCollegeFilter;
                 
                 const majorMatch = currentMajorFilter === '' || 
-                                   person.appliedColleges.some(c => c.major === currentMajorFilter);
+                                   person.attending.major === currentMajorFilter;
 
                 return collegeMatch && majorMatch;
             });
@@ -513,7 +613,7 @@
 
         function renderAlumniCards(list) {
             const container = document.getElementById('alumni-list-container');
-            container.innerHTML = ''; // Clear existing cards
+            container.innerHTML = ''; 
 
             if (list.length === 0) {
                 container.innerHTML = `<p class="text-center text-xl text-gray-500 col-span-full mt-10">No alumni match the current filters.</p>`;
@@ -522,37 +622,33 @@
 
             list.forEach((person, index) => {
                 const card = document.createElement('div');
-                card.className = 'person-card';
-                // Pass the index in the activeAlumniList for navigation
+                card.className = 'person-card animated-card';
+                card.style.animationDelay = `${index * 50}ms`;
                 card.setAttribute('onclick', `openModal(${index})`);
                 
                 const attendingCollege = person.attending;
                 const attendingInfo = attendingCollege ? 
-                    `<p class="text-base text-blue-700 font-semibold">${attendingCollege.name}</p>
+                    `<p class="text-base font-semibold" style="color: #1e40af;">${attendingCollege.name}</p>
                      <p class="text-sm text-gray-600">${attendingCollege.major}</p>` :
                     `<p class="text-sm text-gray-400 italic">Decision Pending/Other</p>`;
                 
-                // Card Avatar is 64x64 (default)
-                const avatarHtml = createAvatar(person.name, person.avatarColor, person.avatarUrl);
+                const initials = person.name.split(' ').map(n => n[0]).join('');
 
                 card.innerHTML = `
-                    <div class="flex items-center w-full mb-3">
-                        ${avatarHtml}
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-800">${person.name}</h2>
-                            <p class="text-sm text-gray-500 font-medium">Class of ${person.chsClassYear}</p>
-                        </div>
+                    <div class="card-avatar-header" style="background-color: ${person.avatarColor};">
+                        ${person.avatarUrl && !person.avatarUrl.includes('placehold.co') ? 
+                            `<img src="${person.avatarUrl}" alt="${person.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${initials}';">` : 
+                            initials
+                        }
                     </div>
                     
-                    <div class="w-full flex justify-between items-end border-t border-blue-100 pt-3 mt-2">
-                        <div>
+                    <div class="card-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">${person.name}</h2>
+                        <p class="text-sm font-medium mb-3" style="color: #1e40af;">Class of ${person.chsClassYear}</p>
+                        
+                        <div class="border-t border-gray-200 pt-3">
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Attending</p>
                             ${attendingInfo}
-                        </div>
-                        <!-- Socials in Preview Card -->
-                        <div class="flex space-x-3 text-lg">
-                            <a href="${person.socials.linkedin || '#'}" target="_blank" class="text-blue-600 hover:text-blue-800 social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                            <a href="${person.socials.instagram || '#'}" target="_blank" class="text-pink-600 hover:text-pink-800 social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 `;
@@ -565,7 +661,6 @@
             const prevButton = document.getElementById('nav-prev');
             const nextButton = document.getElementById('nav-next');
             
-            // Disable arrows at the beginning and end of the list
             prevButton.disabled = currentProfileIndex === 0;
             nextButton.disabled = currentProfileIndex === activeAlumniList.length - 1;
         }
@@ -584,7 +679,27 @@
             }
         }
 
-        // --- MODAL FUNCTIONS ---
+        // --- WELCOME MODAL FUNCTIONS (New) ---
+
+        function showWelcomeModal() {
+            const modal = document.getElementById('welcome-modal');
+            const modalContent = modal.querySelector('.bg-amber-100'); // Target the inner content for animation
+            modal.style.display = 'flex';
+            // Force reflow for animation
+            void modalContent.offsetWidth; 
+            modal.classList.add('modal-show');
+        }
+
+        function closeWelcomeModal() {
+            const modal = document.getElementById('welcome-modal');
+            modal.classList.remove('modal-show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+
+        // --- PROFILE MODAL FUNCTIONS ---
 
         function openModal(indexInActiveList) {
             const person = activeAlumniList[indexInActiveList];
@@ -592,23 +707,28 @@
             const modal = document.getElementById('person-modal');
             const modalContent = modal.querySelector('.modal-content-animated');
             
-            // Get Attending Info
             const attendingCollege = person.attending.name;
             const attendingMajor = person.attending.major;
 
             // Populate Header Info
-            // Modal Avatar is 80x80
             document.getElementById('modal-avatar').innerHTML = createAvatar(
                 person.name, 
                 person.avatarColor, 
                 person.avatarUrl, 
-                '80px', // Larger size for modal
-                '2rem'  // Larger font size for modal initials
+                '80px', 
+                '2rem'  
             );
+            // Center the avatar properly
+            const avatarDiv = document.getElementById('modal-avatar');
+            avatarDiv.style.display = 'flex';
+            avatarDiv.style.alignItems = 'center';
+            avatarDiv.style.justifyContent = 'center';
 
             document.getElementById('modal-name').textContent = person.name;
             document.getElementById('modal-class-year').textContent = `Class of ${person.chsClassYear}`;
+            document.getElementById('modal-class-year').style.color = '#1e40af';
             document.getElementById('modal-attending-college').textContent = attendingCollege;
+            document.getElementById('modal-attending-college').style.color = '#1e40af';
             document.getElementById('modal-attending-major').textContent = attendingMajor;
             
             // Populate Connect with Alumni Socials
@@ -619,60 +739,84 @@
             const testScoreType = person.stats.act ? 'ACT' : (person.stats.sat ? 'SAT' : null);
             const testScoreValue = person.stats.act || person.stats.sat;
 
-            let statsHTML = `<div class="flex justify-between items-center py-1"><span>GPA (W):</span><span class="font-semibold text-blue-600">${person.stats.gpa ? person.stats.gpa.toFixed(2) : 'N/A'}</span></div>`;
+            let statsHTML = `<div class="py-1"><span class="font-medium">GPA (Weighted):</span> <span class="font-semibold">${person.stats.gpa ? person.stats.gpa.toFixed(2) : '-'}</span></div>`;
             
             if (testScoreType) {
-                statsHTML += `<div class="flex justify-between items-center py-1"><span>${testScoreType}:</span><span class="font-semibold text-blue-600">${testScoreValue}</span></div>`;
+                statsHTML += `<div class="py-1"><span class="font-medium">${testScoreType}:</span> <span class="font-semibold">${testScoreValue}</span></div>`;
             } else {
-                statsHTML += `<div class="flex justify-between items-center py-1"><span>SAT/ACT:</span><span class="font-semibold text-blue-600">N/A</span></div>`;
+                statsHTML += `<div class="py-1"><span class="font-medium">SAT/ACT:</span> <span class="font-semibold">-</span></div>`;
             }
+            
             document.getElementById('modal-stats').innerHTML = statsHTML;
+            
+            // Show class recommendations if available
+            const classRecommendationsDiv = document.getElementById('modal-class-recommendations');
+            if (person.classRecommendations) {
+                classRecommendationsDiv.textContent = person.classRecommendations;
+                classRecommendationsDiv.classList.remove('hidden');
+            } else {
+                classRecommendationsDiv.classList.add('hidden');
+            }
 
             // Populate Advice
             document.getElementById('modal-advice').textContent = person.advice;
 
-            // Populate Recommenders
+            // Populate Recommenders with person icons (blue)
             const recommendersContainer = document.getElementById('modal-recommenders');
             recommendersContainer.innerHTML = person.recommenders.map(r => `
-                <li class="flex items-center text-gray-700">
-                    <i class="fas fa-user text-blue-500 mr-3"></i> ${r}
+                <li class="flex items-start text-gray-700">
+                    <i class="fas fa-user mr-2 mt-1 flex-shrink-0" style="color: #1e40af;"></i> 
+                    <span>${r}</span>
                 </li>
             `).join('');
             
-            // Populate Activities (only in left column)
+            // Populate Activities with green checkmarks
             const activitiesContainer = document.getElementById('modal-activities');
-            activitiesContainer.innerHTML = person.activities.map(a => `<li>${a}</li>`).join('');
-
-            // Colleges Applied section is removed
+            activitiesContainer.innerHTML = person.activities.map(a => `
+                <li class="flex items-start text-gray-700">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1 flex-shrink-0"></i>
+                    <span>${a}</span>
+                </li>
+            `).join('');
 
             // Populate Experience Ratings
             const experienceContainer = document.getElementById('modal-experience-ratings');
             experienceContainer.innerHTML = Object.keys(person.experience).map(key => {
                 const rating = person.experience[key];
                 return `
-                    <div class="flex justify-between items-center py-1">
-                        <span class="text-gray-700">${key}:</span>
-                        <div class="star-rating text-lg flex items-center">
-                            ${getStarRatingHTML(rating)} 
-                            <span class="ml-2 text-sm text-gray-500 font-medium">(${rating})</span>
+                    <div class="py-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-gray-700 font-medium">${key}:</span>
+                            <span class="text-sm text-gray-500 font-medium">${rating}</span>
+                        </div>
+                        <div class="star-rating text-lg">
+                            ${getStarRatingHTML(rating)}
                         </div>
                     </div>
                 `;
             }).join('');
+            
+            // Show experience description if available (with line breaks preserved)
+            const descriptionDiv = document.getElementById('modal-experience-description');
+            if (person.experienceDescription) {
+                descriptionDiv.style.whiteSpace = 'pre-line';
+                descriptionDiv.textContent = person.experienceDescription;
+                descriptionDiv.classList.remove('hidden');
+            } else {
+                descriptionDiv.classList.add('hidden');
+            }
 
             // Update navigation state
             updateModalNavigation();
 
             // Show modal with animation
             modal.style.display = 'flex';
-            // Force reflow for animation
             void modalContent.offsetWidth; 
             modal.classList.add('modal-show');
         }
 
         function closeModal() {
             const modal = document.getElementById('person-modal');
-            const modalContent = modal.querySelector('.modal-content-animated');
             
             modal.classList.remove('modal-show');
             
@@ -681,21 +825,52 @@
             }, 300); 
         }
 
-        // Event listener for closing modal when clicking outside
+        // Custom message box implementation (instead of alert)
+        function showMessage(message) {
+            // Find or create a message box element
+            let msgBox = document.getElementById('custom-message-box');
+            if (!msgBox) {
+                msgBox = document.createElement('div');
+                msgBox.id = 'custom-message-box';
+                msgBox.className = 'fixed top-5 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white p-4 rounded-lg shadow-xl z-[1100] transition-opacity duration-300 opacity-0';
+                document.body.appendChild(msgBox);
+            }
+            msgBox.textContent = message;
+            
+            // Show the box
+            msgBox.style.opacity = '1';
+
+            // Hide the box after 3 seconds
+            clearTimeout(msgBox.timeoutId);
+            msgBox.timeoutId = setTimeout(() => {
+                msgBox.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Overriding the default alert used by the listen button
+        window.alert = function(message) {
+            showMessage(message);
+        };
+
+        // Event listener for closing modals when clicking outside
         document.getElementById('person-modal').addEventListener('click', function(e) {
-            // Check if the click target is the overlay itself AND not a navigation button
             if (e.target.id === 'person-modal' || e.target.closest('.modal-content-animated') === null) {
-                // Ensure it's not one of the navigation buttons
                 if (e.target.closest('.modal-nav-button') === null) {
                     closeModal();
                 }
             }
         });
+        document.getElementById('welcome-modal').addEventListener('click', function(e) {
+            if (e.target.id === 'welcome-modal' || e.target.closest('.bg-amber-100') === null) {
+                closeWelcomeModal();
+            }
+        });
 
-        // --- INITIALIZATION ---
+        // --- INITIALIZATION (Crucial: Call the welcome modal here) ---
         window.onload = function() {
             populateFilters();
             renderAlumniCards(alumniData); // Initial load of all data
+            showWelcomeModal(); // <--- THIS ENSURES THE POPUP OPENS ON LOAD!
         };
     </script>
 </body>

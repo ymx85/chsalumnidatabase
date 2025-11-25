@@ -175,7 +175,7 @@
                         </h3>
                         <div class="text-gray-700 space-y-2 text-sm md:text-base">
                             <div class="flex justify-between">
-                                <span class="font-medium">GPA (Weighted):</span>
+                                <span class="font-medium" id="modal-gpa-label">GPA (Weighted):</span>
                                 <span class="font-semibold" id="modal-gpa"></span>
                             </div>
                             <!-- Unweighted GPA (Hidden by default) -->
@@ -183,9 +183,12 @@
                                 <span class="font-medium">GPA (Unweighted):</span>
                                 <span class="font-semibold" id="modal-gpa-unweighted"></span>
                             </div>
-                            <div class="flex justify-between">
+                            <div class="flex justify-between flex-wrap">
                                 <span class="font-medium" id="modal-test-label">SAT/ACT:</span>
-                                <span class="font-semibold" id="modal-test-score"></span>
+                                <div class="text-right">
+                                    <span class="font-semibold" id="modal-test-score"></span>
+                                    <span class="text-xs text-gray-500 block hidden" id="modal-sat-breakdown"></span>
+                                </div>
                             </div>
                         </div>
 
@@ -196,6 +199,7 @@
                         <h3 class="text-xl font-bold text-blue-800 mb-3 pb-2 mt-6 flex items-center border-b border-blue-50">
                             <i class="fas fa-user-tie mr-2"></i> Recommenders
                         </h3>
+                        <!-- Always visible, content changes -->
                         <ul id="modal-recommenders" class="space-y-2">
                             <!-- Recommenders List -->
                         </ul>
@@ -253,7 +257,7 @@
             starRating: 4.5,
             socials: { linkedin: "#", instagram: "#" },
             attending: { name: "Dartmouth College", major: "Economics & History" },
-            recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Rauch (AP Biology teacher)"],
+            recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Rauch (AP Bio)"],
             activities: [
               "The Distinguished Graduate of 2024 (Valedictorian)",
               "4x Scholar Athlete",
@@ -272,7 +276,13 @@
             ],
             advice: "Coming soon!",
             experience: { "Food": 4.8, "Weather": 3.8, "Rigor": 4, "Overall": 4.5 },
-            experienceDescription: "Food is all-you-can-eat buffet style with new menus every day, 15 options per breakfast, lunch, dinner. Best cookies I've ever had.\n\nWeather: The most gorgeous fall you will ever see, but the winters are brutal. Rains often.\n\nRigor: Three course quarters, so very fast pace. Easy to get behind and exams are tough. B+ enforced medians for Econ and Gov classes.\n\nOverall: Great experience. Smaller than CHS, so very easy to make friends and run into people you know. Very relaxing campus and everywhere is a maximum 10 minute walk.",
+            experienceComments: {
+                "Food": "All-you-can-eat buffet style with new menus every day, 15 options per breakfast, lunch, dinner. Best cookies I've ever had.",
+                "Weather": "The most gorgeous fall you will ever see, but the winters are brutal. Rains often.",
+                "Rigor": "Three course quarters, so very fast pace. Easy to get behind and exams are tough. B+ enforced medians for Econ and Gov classes.",
+                "Overall": "Great experience. Smaller than CHS, so very easy to make friends and run into people you know. Very relaxing campus and everywhere is a maximum 10 minute walk."
+            },
+            experienceDescription: null,
             classRecommendations: null
           },
           {
@@ -285,9 +295,9 @@
             starRating: 4.6,
             socials: { linkedin: "#", instagram: "#" },
             attending: { name: "UC Berkeley", major: "Economics" },
-            recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Anderson"],
+            recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Anderson"],
             activities: [
-              "Co-President of Economics Club",
+              "Economics Club Co-President",
               "Published economics research",
               "President of Carmel Esports",
               "DECA ICDC Finalist (8th)",
@@ -308,7 +318,7 @@
             starRating: 4.5,
             socials: { linkedin: "#", instagram: "#" },
             attending: { name: "Stanford University", major: "Computer Science" },
-            recommenders: ["Mrs. Hargrove (APUSH teacher)", "Mr. Werkne (AP Stats teacher)", "Mr. McDonough (Counselor)"],
+            recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Werkne (AP Stats)", "Mr. McDonough (Counselor)"],
             activities: [
               "Computer Science Tutor (volunteer/paid)",
               "Founder of Deep Learning Club",
@@ -332,9 +342,9 @@
             starRating: 3.2,
             socials: { linkedin: "#", instagram: "#" },
             attending: { name: "Columbia University", major: "Linguistics & Computer Science" },
-            recommenders: ["Mr. Rauch (AP Biology teacher)", "Mrs. Lee (Chinese teacher)"],
+            recommenders: ["Mr. Rauch (AP Bio)", "Mrs. Lee (Chinese)"],
             activities: [
-              "Founder of Biology Club",
+              "Biology Club Founder",
               "HiLite Editor",
               "Esports League Captain & State Champion",
               "AIME Qualifier",
@@ -349,7 +359,10 @@
             ],
             advice: "Start on your applications early, it's really nice to have most of your essays done early so you can just proofread closer to the deadline. Don't be afraid to ask for advice, but more importantly, don't be afraid to turn down suggestions if you feel like they don't match your style/voice. Try to tell a story with your essays that highlights your character and your passions, also think about what kind of values the colleges you're applying to value. Columbia, for example, likes people that are worldly and love knowledge for its own sake (you might get a sense of this from Columbia's emphasis on the 'core').",
             experience: { "Food": 3, "Weather": 3, "Rigor": 3.5 },
-            experienceDescription: "The food doesn't matter too much because you’re in NYC.",
+            experienceComments: {
+                "Food": "The food doesn't matter too much because you’re in NYC."
+            },
+            experienceDescription: null,
             classRecommendations: null
           },
           {
@@ -362,7 +375,7 @@
             starRating: 3.2,
             socials: { linkedin: "#", instagram: "#" },
             attending: { name: "University of Chicago", major: "Business, Economics & Data Science" },
-            recommenders: ["Mr. Streisel (Newspaper)", "Mrs. Weisner (AP Chemistry)"],
+            recommenders: ["Mr. Streisel (Newspaper)", "Mrs. Weisner (AP Chem)"],
             activities: [
               "HiLite Editor-in-Chief",
               "EmpowHER Stem Co-Founder",
@@ -374,7 +387,10 @@
             ],
             advice: "My biggest piece of advice is when you're writing your supplementals don't just copy and paste answers for different colleges prompts. Make sure you're always researching the university specific programs or institutes or what makes them unique. Your response is an application standout and don't be afraid to be creative in your responses. I think that's what's really important when sending out when your admissions officer reads thousands of essays per day.",
             experience: { "Food": 2.5, "Weather": 3, "Rigor": 4 },
-            experienceDescription: "Food doesn’t really matter because you can easily go to Chicago.",
+            experienceComments: {
+                "Food": "Food doesn’t really matter because you can easily go to Chicago."
+            },
+            experienceDescription: null,
             classRecommendations: null
           },
           {
@@ -386,7 +402,7 @@
             stats: { gpa: 4.3, act: null, sat: null },
             starRating: 5.0,
             socials: { linkedin: "#", instagram: "#" },
-            attending: { name: "Indiana University", major: "Finance" },
+            attending: { name: "Indiana University (Kelley)", major: "Finance" },
             recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Browning"],
             activities: [
               "Mock Trial President",
@@ -439,7 +455,7 @@
             stats: { gpa: 4.81, unweightedGpa: 4.0, act: null, sat: 1510 },
             starRating: 3.5,
             socials: { linkedin: "#", instagram: "#" },
-            attending: { name: "IU Indianapolis", major: "Biomedical Sciences (Accelerated 3+4 Pathway)" },
+            attending: { name: "Indiana University (Indianapolis)", major: "Biomedical Sciences (Accelerated 3+4 Pathway)" },
             recommenders: ["Mr. Rauch (AP Bio)", "Sarah Fantin (Hanover College professor)", "Lorena Muñoz (MEDLIFE HQ Coordinator)"],
             activities: [
               "Distinguished Grad",
@@ -462,10 +478,149 @@
               "Norman Borlaug Scholar (World Food Prize)",
               "600+ service hours"
             ],
-            advice: "For people looking to apply to BS/MD programs, staff of BS/MD programs typically know that students may still be unsure of what they want to do with their future, so they look for maturity in your application. In your essays, make sure you demonstrate your motivation for applying and show that it was your own decision as a strong independent thinker. Among BS/MD applicants, pretty much everyone will look pretty similar on paper in terms of stats, so having strong letters of recommendation is important. Make sure your recommenders know about YOU (e.g. shadowing, research, volunteering, etc.). Another tip - don’t make your entire profile medicine related. Staff want to see that you made a point of helping others outside of the field of medicine and explored other disciplines. Exhibit ALL of your experiences and activities that have led up to your application and it’s okay to be emotional in your essays!",
+            advice: "For people looking to apply to BS/MD programs, staff of BS/MD programs typically know that students may still be unsure of what they want to do with their future, so they look for maturity in your application. In your essays, make sure you demonstrate your motivation for applying and show that it was your own decision as a strong independent thinker. Among BS/MD applicants, pretty much everyone will look pretty similar on paper in terms of stats, so having strong letters of recommendation is important. Make sure your recommenders know about YOU (e.g. shadowing, research, volunteering, etc). Another tip - don’t make your entire profile medicine related. Staff want to see that you made a point of helping others outside of the field of medicine and explored other disciplines. Exhibit ALL of your experiences and activities that have led up to your application and it’s okay to be emotional in your essays!",
             experience: { "Food": 2, "Weather": 4, "Rigor": 3, "Overall": 3.5 },
             experienceDescription: null,
             classRecommendations: "10 AP’s + 1 IB, PLTW"
+          },
+          {
+            id: 9,
+            name: "Aayush Singh",
+            avatarColor: "#011F5B",
+            avatarUrl: "https://placehold.co/64x64/011F5B/white?text=AS",
+            chsClassYear: 2025,
+            stats: { gpa: 4.64, unweightedGpa: 3.96, act: null, sat: 1580, satBreakdown: "800 RW, 780 M" },
+            starRating: 4.0,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "University of Pennsylvania", major: "Physics & Chemical Engineering" },
+            recommenders: [],
+            activities: [
+              "Top Scholar",
+              "SciOly Officer, Top 8 in the Nation for Forestry",
+              "Cross Country",
+              "Indy project STEM internship",
+              "Social Studies Peer Tutor Leader",
+              "Science Bowl (senior year)",
+              "Quiz Bowl",
+              "Back to Bach & United Sound (Orchestra)",
+              "German exchange program"
+            ],
+            advice: "Coming soon!",
+            experience: { "Food": 3.75, "Weather": 4, "Rigor": 4, "Overall": 4 },
+            experienceComments: {
+                "Food": "Not always great, but definitely more good than bad. Also Philly food scene is great, I'm a big fan.",
+                "Weather": "Better than Indiana I think, but it might have just been a great fall.",
+                "Rigor": "Did you know that classes are harder in college? Insane man I never knew",
+                "Overall": "I like college, very fun."
+            },
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 10,
+            name: "Ishan Choudhary",
+            avatarColor: "#990000",
+            avatarUrl: "https://placehold.co/64x64/990000/white?text=IC",
+            chsClassYear: 2025,
+            stats: { gpa: 4.2, act: null, sat: 1490 },
+            starRating: 4.0,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "Indiana University (Kelley)", major: "Finance & Business Analytics" },
+            recommenders: [],
+            activities: [
+              "DECA (3x ICDC Qualifier)",
+              "Carmel Dance Marathon/CHS Student Government Cabinet Leader",
+              "Education Station Tutor",
+              "Internship (junior year summer)",
+              "Varsity Track & Cross Country",
+              "Local Restaurant Job"
+            ],
+            advice: "Coming soon!",
+            experience: { "Food": 4, "Weather": null, "Rigor": null, "Overall": null },
+            experienceComments: {
+                "Food": "Food selection across the three dining halls is pretty vast, decent amount of choices, and quality is pretty high across them all, so overall I am satisfied.",
+                "Weather": "It’s Indiana so it’s what you would expect - hot in the summer, cold in the winter, falls and springs are temperate so overall weather is fine.",
+                "Rigor": "The rigor of classes for Kelley in the first year is not super high—they definitely do increase in rigor in second year and onwards—but first year the rigor is fairly low for Kelley classes. I would say the challenging part of Kelley is the extracurriculars and case competitions, as you have to be on the top of your game in interviews and essays when applying to clubs and business frats, and you also have to prepare a lot and learn a lot of new concepts in order to do well in case comps, so I would say the rigor in that aspect is very high.",
+                "Overall": "My overall experience so far has been great, I really enjoy IU as I feel it is a very work hard play hard culture; the professors are very helpful, there are a ton of resources to help you learn and grow as a person, everyone here is super friendly and easy to talk to, and there is always something to do on the weekends which is great. (Also, our football team is amazing this year)."
+            },
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 11,
+            name: "Jordan Seigel",
+            avatarColor: "#A51C30",
+            avatarUrl: "https://placehold.co/64x64/A51C30/white?text=JS",
+            chsClassYear: 2023,
+            stats: { gpa: null, act: null, sat: null },
+            starRating: 4.5,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "Harvard College", major: "Economics & Statistics" },
+            recommenders: [],
+            activities: [
+              "Speech & Debate Officer",
+              "Quiz Bowl President",
+              "Economics Club President",
+              "Social Studies Peer Tutor Head"
+            ],
+            advice: "Coming soon!",
+            experience: { "Food": 2.5, "Weather": 1.5, "Rigor": 3, "Overall": 4.5 },
+            experienceComments: null,
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 12,
+            name: "Yusuf Mallick",
+            avatarColor: "#E00122",
+            avatarUrl: "https://placehold.co/64x64/E00122/white?text=YM",
+            chsClassYear: 2025,
+            stats: { gpa: 3.8, gpaLabel: "GPA:", act: null, sat: 1320 },
+            starRating: 3.5,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "University of Cincinnati (Lindner College of Business)", major: "Finance & Operations Management" },
+            recommenders: [],
+            activities: [
+              "GKOM Council",
+              "DECA",
+              "House of Representatives",
+              "National Honor Society",
+              "Taekwondo Instructor Captain"
+            ],
+            advice: "Very high acceptance rate, so with average stats (as long as the essay is decent) you should get in. If applying from the business side and above average stats, push for the college-specific honors college (i.e. Lindner Business Honors). Cincinnati is a huge, powerful market in the Midwest, housing Kroger’s, PNG’s and Fifth Third’s headquarters. It also has massive offices for the Big Four (big banks like JP and US). These companies will send recruiters and sit in the business building lobby, because it is only a five-minute drive for them, so there is a ton of face-to-face connection ability. However, UC is not an elite school, so to make yourself a standout elite student from day one to attract these companies on paper being an honors student and gaining connections from the honors program is the best way to do so.",
+            experience: { "Food": 3.8, "Weather": 3, "Rigor": 2, "Overall": 4 },
+            experienceComments: {
+                "Weather": "Normal Midwest weather.",
+                "Rigor": "Pace is a new adjustment, overall content is not very difficult.",
+                "Overall": "Balanced between academics and a mid-size sports school (Big 12 Conference). Lots and lots of social opportunities, plus easy, free, quick access to a major Midwest city ."
+            },
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 13,
+            name: "Kevin Hu",
+            avatarColor: "#A51C30",
+            avatarUrl: "https://placehold.co/64x64/A51C30/white?text=KH",
+            chsClassYear: 2024,
+            stats: { gpa: 4.65, act: 36, sat: null },
+            starRating: 4.0,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "Harvard College", major: "Statistics" },
+            recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Wernke (AP Stats)"],
+            activities: [
+              "Math Club President",
+              "Science Bowl President",
+              "National History Day President",
+              "Speech & Debate (Public Forum Captain)",
+              "Peer Tutor",
+              "Band"
+            ],
+            advice: "Coming soon!",
+            experience: { "Food": 3, "Weather": 3.5, "Rigor": 4.5, "Overall": 4 },
+            experienceComments: null,
+            experienceDescription: null,
+            classRecommendations: null
           }
         ];
 
@@ -474,7 +629,8 @@
         let selectedPersonId = null;
         
         // IDs that get the Voice Memo Button instead of standard header
-        const VOICE_MEMO_IDS = [1, 3, 6, 7]; // Royce, Alan, Ayaan, Jenny
+        // Updated to include Jordan (11) and Kevin (13)
+        const VOICE_MEMO_IDS = [1, 3, 6, 7, 9, 10, 11, 13]; 
 
         window.onload = () => {
             sortAlumniData();
@@ -651,6 +807,14 @@
             document.getElementById('modal-major').innerText = person.attending.major;
             
             // Stats
+            // Handle Custom GPA Label (e.g. for Yusuf)
+            const gpaLabel = document.getElementById('modal-gpa-label');
+            if (person.stats.gpaLabel) {
+                gpaLabel.innerText = person.stats.gpaLabel;
+            } else {
+                gpaLabel.innerText = 'GPA (Weighted):';
+            }
+
             document.getElementById('modal-gpa').innerText = person.stats.gpa ? person.stats.gpa.toFixed(2) : '-';
             
             // Unweighted GPA Logic
@@ -664,6 +828,15 @@
 
             document.getElementById('modal-test-label').innerText = person.stats.act ? 'ACT:' : 'SAT:';
             document.getElementById('modal-test-score').innerText = person.stats.act || person.stats.sat || '-';
+            
+            // SAT Breakdown Logic
+            const satBreakdownContainer = document.getElementById('modal-sat-breakdown');
+            if (person.stats.satBreakdown) {
+                satBreakdownContainer.innerText = `(${person.stats.satBreakdown})`;
+                satBreakdownContainer.classList.remove('hidden');
+            } else {
+                satBreakdownContainer.classList.add('hidden');
+            }
 
             // Class Recs
             const recsBox = document.getElementById('modal-class-recs');
@@ -674,14 +847,24 @@
                 recsBox.classList.add('hidden');
             }
 
-            // Recommenders (Remove "teacher")
+            // Recommenders
             const recList = document.getElementById('modal-recommenders');
-            recList.innerHTML = person.recommenders.map(r => `
-                <li class="flex items-start text-gray-700 text-sm md:text-base">
-                    <i class="fas fa-user mr-2 mt-1 flex-shrink-0 text-blue-800"></i>
-                    <span>${r.replace(/ teacher\)/gi, ')')}</span>
-                </li>
-            `).join('');
+            
+            // Ensure header is always visible
+            recList.previousElementSibling.classList.remove('hidden');
+            recList.parentElement.classList.remove('hidden');
+
+            if (person.recommenders && person.recommenders.length > 0) {
+                 recList.innerHTML = person.recommenders.map(r => `
+                    <li class="flex items-start text-gray-700 text-sm md:text-base">
+                        <i class="fas fa-user mr-2 mt-1 flex-shrink-0 text-blue-800"></i>
+                        <span>${r.replace(/ teacher\)/gi, ')')}</span>
+                    </li>
+                `).join('');
+            } else {
+                recList.innerHTML = ''; // Keep it empty as requested for Aayush
+            }
+
 
             // Activities
             const actList = document.getElementById('modal-activities');
@@ -692,16 +875,26 @@
                 </li>
             `).join('');
 
-            // Experience Ratings
+            // Experience Ratings & Comments
             const ratingsDiv = document.getElementById('modal-ratings');
             ratingsDiv.innerHTML = Object.entries(person.experience).map(([key, val]) => {
+                // Apply updated styling to match class recommendations box
+                const comment = person.experienceComments && person.experienceComments[key] 
+                    ? `<div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 italic border-l-4 border-gray-200">${person.experienceComments[key]}</div>` 
+                    : '';
+                
+                // Hide stars if val is null
+                const starHtml = val !== null ? `<div class="text-lg leading-none">${getStarHtml(val)}</div>` : '';
+                const ratingText = val !== null ? `(${val.toFixed(1)})` : '';
+
                 return `
-                    <div class="py-1">
+                    <div class="py-1 mb-2">
                         <div class="flex justify-between items-center mb-1">
                             <span class="text-gray-700 font-medium text-sm md:text-base">${key}:</span>
-                            <span class="text-sm text-gray-500 font-medium">(${val.toFixed(1)})</span>
+                            <span class="text-sm text-gray-500 font-medium">${ratingText}</span>
                         </div>
-                        <div class="text-lg">${getStarHtml(val)}</div>
+                        ${starHtml}
+                        ${comment}
                     </div>
                 `;
             }).join('');

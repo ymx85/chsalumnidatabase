@@ -213,6 +213,9 @@
                         <ul id="modal-activities" class="space-y-2">
                             <!-- Activities List -->
                         </ul>
+                        <div id="modal-activity-comment" class="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 italic border-l-4 border-gray-200 hidden">
+                            <!-- Activity Comment -->
+                        </div>
                     </div>
 
                     <!-- Column 3: Campus Experience -->
@@ -427,7 +430,11 @@
             stats: { gpa: 4.33, act: null, sat: 1490 },
             starRating: 4.0,
             socials: { linkedin: "#", instagram: "#" },
-            attending: { name: "Purdue University", major: "Mathematics & Statistics" },
+            attending: { 
+                name: "Purdue University", 
+                major: "Mathematical Statistics", 
+                filterMajors: ["Mathematics", "Statistics"]
+            },
             recommenders: ["Mr. James (AP Physics)", "Mrs. Hargrove (APUSH)"],
             activities: [
               "FinXed Executive Member",
@@ -481,7 +488,7 @@
             advice: "For people looking to apply to BS/MD programs, staff of BS/MD programs typically know that students may still be unsure of what they want to do with their future, so they look for maturity in your application. In your essays, make sure you demonstrate your motivation for applying and show that it was your own decision as a strong independent thinker. Among BS/MD applicants, pretty much everyone will look pretty similar on paper in terms of stats, so having strong letters of recommendation is important. Make sure your recommenders know about YOU (e.g. shadowing, research, volunteering, etc). Another tip - don’t make your entire profile medicine related. Staff want to see that you made a point of helping others outside of the field of medicine and explored other disciplines. Exhibit ALL of your experiences and activities that have led up to your application and it’s okay to be emotional in your essays!",
             experience: { "Food": 2, "Weather": 4, "Rigor": 3, "Overall": 3.5 },
             experienceDescription: null,
-            classRecommendations: "10 AP’s + 1 IB, PLTW"
+            classRecommendations: "10 APs, 1 IB, PLTW"
           },
           {
             id: 9,
@@ -592,7 +599,7 @@
             experienceComments: {
                 "Weather": "Normal Midwest weather.",
                 "Rigor": "Pace is a new adjustment, overall content is not very difficult.",
-                "Overall": "Balanced between academics and a mid-size sports school (Big 12 Conference). Lots and lots of social opportunities, plus easy, free, quick access to a major Midwest city ."
+                "Overall": "Balanced between academics and a mid-size sports school (Big 12 Conference). Lots and lots of social opportunities, plus easy, free, quick access to a major Midwest city."
             },
             experienceDescription: null,
             classRecommendations: null
@@ -618,6 +625,54 @@
             ],
             advice: "Coming soon!",
             experience: { "Food": 3, "Weather": 3.5, "Rigor": 4.5, "Overall": 4 },
+            experienceComments: null,
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 14,
+            name: "Aneesha Singh",
+            avatarColor: "#00274C",
+            avatarUrl: "https://placehold.co/64x64/00274C/white?text=AS",
+            chsClassYear: 2025,
+            stats: { gpa: null, act: null, sat: null },
+            starRating: 4.0,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "University of Michigan", major: "Biology" },
+            recommenders: [],
+            activities: [
+              "United Sound",
+              "MedLife",
+              "Orchestra"
+            ],
+            activityComment: "I did things that I cared about.",
+            advice: "Do things you care about, because it demonstrates you care about what you do—otherwise you're just doing things for no point. Because it really doesn’t matter what you do, as long as you care about what you do.",
+            experience: { "Food": 3, "Weather": 3, "Overall": 4 },
+            experienceComments: {
+                "Weather": "It's fall. Nothing beats a Midwest fall."
+            },
+            experienceDescription: null,
+            classRecommendations: null
+          },
+          {
+            id: 15,
+            name: "Eesha Singh",
+            avatarColor: "#990000",
+            avatarUrl: "https://placehold.co/64x64/990000/white?text=ES",
+            chsClassYear: 2025,
+            stats: { gpa: null, act: null, sat: null },
+            starRating: 5.0,
+            socials: { linkedin: "#", instagram: "#" },
+            attending: { name: "Indiana University", major: "Human Biology" },
+            recommenders: [],
+            activities: [
+              "Tennis",
+              "Speech & Debate",
+              "HOSA",
+              "DECA"
+            ],
+            advice: "The personal statement is super broad and sometimes that’s daunting to people, but really just focus on what personality traits you want to portray in your story.",
+            experience: { "Food": 4, "Weather": 4, "Overall": 5 },
             experienceComments: null,
             experienceDescription: null,
             classRecommendations: null
@@ -669,10 +724,11 @@
             const colleges = new Set(ALUMNI_DATA.map(a => a.attending.name));
             const majors = new Set();
             
-            // Split majors logic (Commas and Ampersands)
+            // Split majors logic (Commas and Ampersands) or use custom filter tags
             ALUMNI_DATA.forEach(a => {
-                const split = a.attending.major.split(/[&,]+/).map(m => m.trim());
-                split.forEach(m => majors.add(m));
+                // If filterMajors exists, use that. Otherwise split string.
+                const tags = a.attending.filterMajors || a.attending.major.split(/[&,]+/).map(m => m.trim());
+                tags.forEach(m => majors.add(m));
             });
 
             Array.from(colleges).sort().forEach(c => {
@@ -696,9 +752,10 @@
 
             currentFilteredList = ALUMNI_DATA.filter(p => {
                 const matchesCollege = collegeVal ? p.attending.name === collegeVal : true;
-                const matchesMajor = majorVal 
-                    ? p.attending.major.split(/[&,]+/).map(m => m.trim()).includes(majorVal)
-                    : true;
+                
+                const tags = p.attending.filterMajors || p.attending.major.split(/[&,]+/).map(m => m.trim());
+                const matchesMajor = majorVal ? tags.includes(majorVal) : true;
+                
                 return matchesCollege && matchesMajor;
             });
 
@@ -826,7 +883,12 @@
                 uwContainer.classList.add('hidden');
             }
 
-            document.getElementById('modal-test-label').innerText = person.stats.act ? 'ACT:' : 'SAT:';
+            // Test Score Label Logic
+            let label = 'SAT/ACT:';
+            if (person.stats.act) label = 'ACT:';
+            else if (person.stats.sat) label = 'SAT:';
+            document.getElementById('modal-test-label').innerText = label;
+
             document.getElementById('modal-test-score').innerText = person.stats.act || person.stats.sat || '-';
             
             // SAT Breakdown Logic
@@ -874,6 +936,15 @@
                     <span>${a}</span>
                 </li>
             `).join('');
+
+            // Activity Comments (Gray Box)
+            const activityCommentBox = document.getElementById('modal-activity-comment');
+            if (person.activityComment) {
+                activityCommentBox.innerText = person.activityComment;
+                activityCommentBox.classList.remove('hidden');
+            } else {
+                activityCommentBox.classList.add('hidden');
+            }
 
             // Experience Ratings & Comments
             const ratingsDiv = document.getElementById('modal-ratings');

@@ -457,7 +457,7 @@
             id: 8,
             name: "Katherine Ke",
             avatarColor: "#990000",
-            avatarUrl: "https://placehold.co/64x64/990000/white?text=KK",
+            avatarUrl: "https://drive.google.com/thumbnail?id=1i8GBKPyqoe5wVLWyMcCVsyNhZXdq2V7Y&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: 4.81, unweightedGpa: 4.0, act: null, sat: 1510 },
             starRating: 3.5,
@@ -494,7 +494,7 @@
             id: 9,
             name: "Aayush Singh",
             avatarColor: "#011F5B",
-            avatarUrl: "https://placehold.co/64x64/011F5B/white?text=AS",
+            avatarUrl: "https://drive.google.com/thumbnail?id=1MxIdj9B-31T6JGnzTqMVTWWX_eGgqjqY&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: 4.64, unweightedGpa: 3.96, act: null, sat: 1580, satBreakdown: "800 RW, 780 M" },
             starRating: 4.0,
@@ -543,7 +543,7 @@
               "Local Restaurant Job"
             ],
             advice: `Coming soon!`,
-            audio: "assets/choudhary.wav",
+            audio: "https://drive.google.com/file/d/1feQNhRBb6s1EqC8VltgukSIuYI4oLtfQ/preview",
             experience: { "Food": 4, "Weather": null, "Rigor": null, "Overall": null },
             experienceComments: {
                 "Food": `Food selection across the three dining halls is pretty vast, decent amount of choices, and quality is pretty high across them all, so overall I am satisfied.`,
@@ -572,7 +572,7 @@
               "Social Studies Peer Tutor Head"
             ],
             advice: `Coming soon!`,
-            audio: "assets/seigel.mp3",
+            audio: "https://drive.google.com/file/d/1gdi-Vv1LlMwNCwJsGLgPX0c8Jq-WcZbY/preview",
             experience: { "Food": 2.5, "Weather": 1.5, "Rigor": 3, "Overall": 4.5 },
             experienceComments: null,
             experienceDescription: null,
@@ -626,7 +626,7 @@
               "Band"
             ],
             advice: `Coming soon!`,
-            audio: "assets/kevinhu.mp3",
+            audio: "https://drive.google.com/file/d/1NLGIIxgOYr7sB1vLF6RrmtcaLQ1A89lk/preview",
             experience: { "Food": 3, "Weather": 3.5, "Rigor": 4.5, "Overall": 4 },
             experienceComments: null,
             experienceDescription: null,
@@ -636,7 +636,7 @@
             id: 14,
             name: "Aneesha Singh",
             avatarColor: "#00274C",
-            avatarUrl: "https://placehold.co/64x64/00274C/white?text=AS",
+            avatarUrl: "https://drive.google.com/thumbnail?id=13GkXbZsJGii8KNIRy3f_4TP2nkTaPncD&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: null, act: null, sat: null },
             starRating: 4.0,
@@ -661,7 +661,7 @@
             id: 15,
             name: "Eesha Singh",
             avatarColor: "#990000",
-            avatarUrl: "https://placehold.co/64x64/990000/white?text=ES",
+            avatarUrl: "https://drive.google.com/thumbnail?id=1W5IYpE1-Oq9IdbATKNcVezBsChdMRo1u&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: null, act: null, sat: null },
             starRating: 5.0,
@@ -699,6 +699,7 @@
               "Indy Nepali Band Flautist & Guitarist"
             ],
             advice: `Coming soon!`,
+            audio: "https://drive.google.com/file/d/1fxlFhoa6qIogxda6YXtOxMLwdRTRf3-2/preview",
             experience: { "Food": 2.5, "Weather": 2, "Rigor": 2, "Overall": null },
             experienceComments: {
                 "Food": `Desserts are 4/5.`,
@@ -711,7 +712,7 @@
             id: 17,
             name: "Henry Joliet",
             avatarColor: "#00274C",
-            avatarUrl: "https://placehold.co/64x64/00274C/white?text=HJ",
+            avatarUrl: "https://drive.google.com/thumbnail?id=1ZSpvtzi0h9jQ_xdUOHAldY7QhPTW8ZYa&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: 4.49, act: 36, sat: 1590 },
             starRating: 4.0,
@@ -727,7 +728,7 @@
               "Carmel Chess Team (Two-Time Varsity)"
             ],
             advice: `I would recommend building connections with teachers/adults/coaches in order to get good rec letters. My two main teachers were Mrs. Hargrove and Mr. Browning, who are two teachers that I have had multiyear relationships with and have a more friendly connection than most of my student-teacher interactions. They wrote me great letters and have kept in touch since getting to college. Build good connections beyond the classroom and those will likely be your biggest supporters. Last piece of advice would be to try and make the application process enjoyable. It’s very easy to get bogged down or intimidated by these schools and essays but remember that you are already in a great position and will eventually find the right place. During the actual process, take breaks: go for a walk/run, play sports, hang out with friends, bake cookies, or do whatever you like to do. One of the most crucial elements of college and the first few years in many careers is managing that work/life balance so don’t burn yourself out trying to accomplish more than feels right to you.`,
-            audio: "assets/joliet.mp3",
+            audio: "https://drive.google.com/file/d/1ehEmFBTvgW1ggidciJGMdngFGu-EhKfd/preview",
             experience: { 
                 "Food": 3, 
                 "Weather": 4, 
@@ -776,33 +777,53 @@
             });
         };
 
-        // --- SIMPLE AUDIO LOGIC ---
-        function playAudio(url) {
-            // 1. Stop any currently playing
-            if (globalAudio) {
-                globalAudio.pause();
-                globalAudio.currentTime = 0;
-            }
-
-            // 2. Setup
-            console.log("Attempting to play:", url);
-            globalAudio = new Audio(url);
-            
-            // 3. Play
-            globalAudio.play().catch(e => {
-                console.error("Playback failed:", e);
-                // Diagnostic Error Handling
-                let msg = "Audio Playback Failed.";
-                if (e.name === 'NotSupportedError') {
-                    msg += "\n\nFormat Not Supported. Did you rename a .caf file to .mp3? You must use a converter tool (like cloudconvert.com).";
-                } else if (e.name === 'NotAllowedError') {
-                    msg += "\n\nBrowser blocked autoplay. Try interacting with the page first.";
-                } else {
-                    msg += "\n\nFile not found or corrupted. Ensure 'assets' folder is in the root directory.";
-                }
-                alert(msg);
-            });
-        }
+// --- AUDIO LOGIC ---
+function playAudio(url) {
+    // Stop any currently playing
+    if (globalAudio) {
+        globalAudio.pause();
+        globalAudio.currentTime = 0;
+        globalAudio = null;
+    }
+    
+    // Extract file ID
+    let fileId = url.match(/\/d\/([^\/]+)/)[1];
+    
+    // Find or create audio player container
+    let playerContainer = document.getElementById('audio-player-container');
+    
+    if (!playerContainer) {
+        // Create container if it doesn't exist
+        playerContainer = document.createElement('div');
+        playerContainer.id = 'audio-player-container';
+        playerContainer.className = 'mt-4 mb-4';
+        
+        // Insert after the button
+        const headerContainer = document.getElementById('modal-advice-header-container');
+        headerContainer.appendChild(playerContainer);
+    }
+    
+    // Toggle player visibility
+    if (playerContainer.innerHTML && playerContainer.style.display !== 'none') {
+        // If player is showing, hide it
+        playerContainer.style.display = 'none';
+        playerContainer.innerHTML = '';
+    } else {
+        // Show/update player
+        playerContainer.style.display = 'block';
+        playerContainer.innerHTML = `
+            <div class="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-semibold text-gray-700">Audio Player</span>
+                    <button onclick="document.getElementById('audio-player-container').style.display='none'" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <iframe src="https://drive.google.com/file/d/${fileId}/preview" width="100%" height="80" frameborder="0" allow="autoplay"></iframe>
+            </div>
+        `;
+    }
+}
         
         function stopAudio() {
             if (globalAudio) {

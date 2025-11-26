@@ -408,7 +408,7 @@
             avatarUrl: "https://hilite.org/wp-content/uploads/2023/08/IMG_5603-e1724439821326-1200x666.jpg",
             chsClassYear: 2025,
             stats: { gpa: 4.3, act: null, sat: null },
-            attending: { name: "Indiana University (Kelley)", major: "Finance" },
+            attending: { name: "Indiana University (Kelley School of Business)", major: "Finance" },
             recommenders: ["Mrs. Hargrove (APUSH)", "Mr. Browning"],
             activities: [
               "Mock Trial President",
@@ -456,10 +456,14 @@
             id: 8,
             name: "Katherine Ke",
             avatarColor: "#990000",
-            avatarUrl: "https://drive.google.com/thumbnail?id=1i8GBKPyqoe5wVLWyMcCVsyNhZXdq2V7Y&sz=w1200",
+            avatarUrl: "https://drive.google.com/thumbnail?id=1i8GBKPyqoe5wVLWyMcCVsyNhZXdq2V7Y&sz=w400",
             chsClassYear: 2025,
             stats: { gpa: 4.81, unweightedGpa: 4.0, act: null, sat: 1510 },
-            attending: { name: "Indiana University (Indianapolis)", major: "Biomedical Sciences (Accelerated 3+4 Pathway)" },
+            attending: { 
+                name: "Indiana University (Indianapolis)", 
+                major: "Biomedical Sciences",
+                majorDetail: "Biomedical Sciences (Accelerated 3+4 Pathway)"
+            },
             recommenders: ["Mr. Rauch (AP Bio)", "Sarah Fantin (Hanover College professor)", "Lorena Muñoz (MEDLIFE HQ Coordinator)"],
             activities: [
               "Distinguished Grad",
@@ -523,7 +527,7 @@
             avatarUrl: "https://placehold.co/64x64/990000/white?text=IC",
             chsClassYear: 2025,
             stats: { gpa: 4.2, act: null, sat: 1490 },
-            attending: { name: "Indiana University (Kelley)", major: "Finance & Business Analytics" },
+            attending: { name: "Indiana University (Kelley School of Business)", major: "Finance & Business Analytics" },
             recommenders: [],
             activities: [
               "DECA (3x ICDC Qualifier)",
@@ -691,7 +695,7 @@
             avatarUrl: "https://drive.google.com/thumbnail?id=1ZSpvtzi0h9jQ_xdUOHAldY7QhPTW8ZYa&sz=w1200",
             chsClassYear: 2025,
             stats: { gpa: 4.49, act: 36, sat: 1590 },
-            attending: { name: "University of Michigan (Ross)", major: "Business" },
+            attending: { name: "University of Michigan (Ross School of Business)", major: "Business" },
             recommenders: [],
             activities: [
               "DECA Competitor & Operations Executive",
@@ -732,7 +736,11 @@
             avatarUrl: "https://placehold.co/64x64/4E3629/white?text=MM",
             chsClassYear: 2022,
             stats: { gpa: 4.69, act: null, sat: 1540 },
-            attending: { name: "Brown University", major: "International & Public Affairs (Policy/Governance track)" },
+            attending: { 
+                name: "Brown University", 
+                major: "International & Public Affairs", 
+                majorDetail: "International & Public Affairs (Policy/Governance track)" 
+            },
             recommenders: ["Frau King (German II & IV)", "Mrs. Kundrat (AP Chem)", "Mrs. Hargrove (APUSH)"],
             activities: [
               "Carmel Mayor’s Youth Council President",
@@ -759,9 +767,14 @@
             name: "Jasmine Zhang",
             avatarColor: "#002878",
             avatarUrl: "https://placehold.co/64x64/002878/white?text=JZ",
-            chsClassYear: 2025, // Assuming based on previous instructions to group new adds
+            chsClassYear: 2025,
             stats: { gpa: 4.3, act: null, sat: null },
-            attending: { name: "Emory University", major: "Neuroscience & Behavioral Biology (encompasses bio, neuro, psych)" },
+            attending: { 
+                name: "Emory University", 
+                major: "Behavioral Biology & Neuroscience", 
+                majorDetail: "Behavioral Biology & Neuroscience (encompasses bio, neuro, psych)",
+                filterMajors: ["Behavioral Biology", "Neuroscience"]
+            },
             recommenders: ["Ms. Pletcher (AP Psych)", "Dr. Marble (AP Bio)", "Mrs. Hargrove (APUSH)"],
             activities: [
               "Synchronized Swim Coach",
@@ -794,7 +807,7 @@
               "Virtual English Tutor for Kyrgyz and Russian-speaking international students (ages 8-13)"
             ],
             advice: `Kelley School of Business has a different set of guidelines and requirements for applying, but in general I’d just recommend looking at the school website. It has all the information anyone interested in applying will need about deadlines, essay submissions, and transcripts etc. One piece of advice I’d give in general is to not shy away from applying to any and all scholarships.`,
-            experience: { "Overall": 5 }, // Just Overall kept as star rating wasn't specified but sentiment is positive, text overrides
+            experience: { "Overall": 5 },
             experienceComments: {
                 "Overall": `I really love IU Bloomington. I think it’s the best choice for someone who wants to stay in-state. It’s not too far from home, the weather is predictable, because it’s very similar to Carmel where you never really know when a full 180 is about to occur. The food is pretty good. The best food is at Forest Dining Hall, the worst I’d say at McNutt. Coursework and adapting to the new workload and routine can be challenging but you kind of pick what you take and choose your schedule, and have ample time to make adjustments as needed. The social life at IU is great. It’s a big school, there are tons of different classes to take, clubs or sports to join, games and tailgates to attend, and a pretty active Greek life for students interested in philanthropy. Overall, I’ve been really enjoying my time at IU.`
             },
@@ -806,7 +819,7 @@
             avatarColor: "#CEB888",
             avatarUrl: "https://drive.google.com/thumbnail?id=1lXMOYIaccdcHKW_hFp7Fp8vnHkP3kp0M&sz=w1200",
             chsClassYear: 2025,
-            stats: { gpa: 4.5, act: null, sat: 1500 }, // 1500+ represented as 1500
+            stats: { gpa: 4.5, act: null, sat: 1500 },
             attending: { name: "Purdue University", major: "Data Science & Statistics" },
             recommenders: ["Mrs. Hargrove (APUSH)", "Mrs. Weisner (AP Chem)", "Mrs. Danubio (Counselor)", "Mr. Barker (Ambassadors Show Choir)"],
             activities: [
@@ -815,7 +828,8 @@
               "SciOly (officer)",
               "Senior Class Vice President"
             ],
-            advice: `Coming soon!`, // No advice provided in prompt, assumed placeholder
+            advice: `Coming soon!`,
+            audio: "https://drive.google.com/file/d/1iQbENTjfQ15uioiDbJePWbcfXXYeWehH/preview",
             experience: { "Food": 3, "Weather": null, "Rigor": null, "Overall": null },
             experienceComments: {
                 "Food": `Dining can be hit or miss.`,
@@ -855,7 +869,7 @@
             avatarUrl: "https://drive.google.com/thumbnail?id=1IPKu1iMCUsTQ8GDhnpaesDWFzH8xWVkm&sz=w1200",
             chsClassYear: 2023,
             stats: { gpa: null, act: null, sat: null },
-            attending: { name: "Indiana University (Kelley)", major: "Finance & Business Analytics" },
+            attending: { name: "Indiana University (Kelley School of Business)", major: "Finance & Business Analytics" },
             recommenders: [],
             activities: [
               "Accents",
@@ -863,7 +877,7 @@
               "Model UN",
               "GKOM"
             ],
-            advice: `Coming soon!`, // No advice text in prompt, likely missed or placeholder needed
+            advice: `Coming soon!`,
             experience: { "Food": 4, "Weather": 3, "Rigor": 4, "Overall": 5 },
             experienceComments: {
                 "Overall": `Overall Kelley and IU have been the perfect fit for me. I wasn’t sure going in if I’d love it but there are just so many opportunities to take advantage of, insane professional connections, and really amazing people`
@@ -877,7 +891,7 @@
             avatarUrl: "https://drive.google.com/thumbnail?id=1QE-CguURlWeFLgkJ13etvfD4eb-fpXzn&sz=w1200",
             chsClassYear: 2025,
             stats: { gpa: null, act: null, sat: 1560 },
-            attending: { name: "University of Michigan (Ross)", major: "Business Administration" },
+            attending: { name: "University of Michigan (Ross School of Business)", major: "Business Administration" },
             recommenders: ["Mr. Dunham (English)", "Mr. Beck (Math)"],
             activities: [
               "Speech & Debate",
@@ -914,6 +928,7 @@
               "Indiana Legal Services’ Immigration Sector Intern"
             ],
             advice: `Choose recommenders who KNOW YOU WELL. I was very lucky to have two outstanding teachers in my life (Mr. Wheeler and Mrs. Hargrove) with whom I was able to build a long-term connection. Mr. Wheeler was my teacher for three years, Mrs. Hargrove for two, and in those years, they got to know me inside and outside the classroom. Choose recommenders who have seen you succeed and fail. Colleges reading about how you react to setbacks is a lot more impactful than a generic “this student is great!” rec letter.`,
+            audio: "https://drive.google.com/file/d/1LfXNl1DNSUl766DPRDXcKqsdAhT99n33/preview",
             experience: { "Food": 3.75, "Weather": null, "Rigor": null, "Overall": null },
             experienceComments: {
                 "Food": `Food at Notre Dame is pretty good. We have two dining halls that offer a wide variety of foods. We also have several restaurants on campus, like Chick-fil-A and Starbucks, that you can pay for with your meal plan. Eddy Street, which is a 15-minute walk from campus, has even more food options that are really good. Some weekends, I’ll go to Eddy Street to eat out with my friends. The burgers at Street Fare (an on-campus restaurant) are 5/5.`,
@@ -930,7 +945,11 @@
             avatarUrl: "https://drive.google.com/thumbnail?id=1QadhVRo2akAqueJOqBJ8_FfyhzKHew4p&sz=w1200",
             chsClassYear: 2025,
             stats: { gpa: 4.4, unweightedGpa: 3.98, act: null, sat: 1490 },
-            attending: { name: "Dartmouth College", major: "Undecided" },
+            attending: { 
+                name: "Dartmouth College", 
+                major: "Undecided", 
+                majorDetail: "Undecided (We don’t declare majors until sophomore winter.)"
+            },
             recommenders: [],
             activities: [
               "IB Diploma",
@@ -953,7 +972,8 @@
         let globalAudio = null; // Single Audio object
         
         // IDs that get the Voice Memo Button instead of standard header (if they don't have an audio file)
-        const VOICE_MEMO_IDS = [1, 3, 6, 7, 9, 10, 11, 13, 16, 17, 21, 25]; 
+        // REMOVED 6, 7, 21, 23, 25 based on user request to hide empty button
+        const VOICE_MEMO_IDS = [1, 3, 9, 16]; 
 
         window.onload = () => {
             sortAlumniData();
@@ -1063,6 +1083,19 @@
             return name;
         }
 
+        function getNormalizedMajor(major) {
+            const m = major.toLowerCase();
+            // Condense Biology
+            if (m.includes("biology") && !m.includes("biomedical")) return "Biology"; // Catches Behavioral, Human, Biology
+            // Condense Business
+            if (m.includes("business")) return "Business"; // Catches Admin, Analytics
+            // Condense Biomedical
+            if (m.includes("biomedical")) return "Biomedical Sciences"; // Catches Health Sci
+            // Condense International
+            if (m.includes("international")) return "International Affairs";
+            return major;
+        }
+
         function toggleDropdown(id) {
             const dropdown = document.getElementById(id);
             dropdown.classList.toggle('hidden');
@@ -1081,7 +1114,7 @@
                 colleges.add(getNormalizedCollege(a.attending.name));
                 
                 const tags = a.attending.filterMajors || a.attending.major.split(/[&,]+/).map(m => m.trim());
-                tags.forEach(m => majors.add(m));
+                tags.forEach(m => majors.add(getNormalizedMajor(m)));
             });
 
             // Populate College Checkboxes
@@ -1132,7 +1165,7 @@
                 
                 // Major Logic: OR (Match any selected)
                 const tags = p.attending.filterMajors || p.attending.major.split(/[&,]+/).map(m => m.trim());
-                const matchesMajor = selectedMajors.length === 0 || tags.some(tag => selectedMajors.includes(tag));
+                const matchesMajor = selectedMajors.length === 0 || tags.some(tag => selectedMajors.includes(getNormalizedMajor(tag)));
                 
                 return matchesCollege && matchesMajor;
             });
@@ -1246,7 +1279,7 @@
             document.getElementById('modal-name').innerText = person.name;
             document.getElementById('modal-college').innerText = person.attending.name;
             document.getElementById('modal-year').innerText = `(Class of ${person.chsClassYear})`;
-            document.getElementById('modal-major').innerText = person.attending.major;
+            document.getElementById('modal-major').innerText = person.attending.majorDetail || person.attending.major;
             
             // Stats
             // Handle Custom GPA Label (e.g. for Yusuf)

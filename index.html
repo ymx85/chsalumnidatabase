@@ -60,6 +60,19 @@
             transform: scale(1);
             opacity: 1;
         }
+
+        /* Custom Checkbox Styles */
+        .custom-checkbox {
+            accent-color: #1e40af;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .filter-dropdown {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
@@ -82,19 +95,30 @@
             </p>
 
             <!-- Filter Controls -->
-            <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-4xl">
-                <div class="flex flex-col w-full sm:w-auto">
-                    <select id="college-select" onchange="filterAlumni()" class="p-2 border border-blue-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-gray-700 text-sm w-full min-w-[200px]">
-                        <option value="">All Colleges</option>
-                        <!-- Populated by JS -->
-                    </select>
+            <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-4xl z-50">
+                
+                <!-- College Multi-Select -->
+                <div class="relative w-full sm:w-auto min-w-[200px]" id="college-filter-group">
+                    <button onclick="toggleDropdown('college-dropdown')" id="college-btn" class="w-full text-left p-2 border border-blue-200 rounded-lg shadow-sm bg-white text-gray-700 text-sm flex justify-between items-center hover:border-blue-400 focus:ring-2 focus:ring-blue-500">
+                        <span id="college-btn-text">All Colleges</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="college-dropdown" class="hidden absolute top-full left-0 w-full sm:w-64 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 p-2 filter-dropdown z-50">
+                        <!-- Checkboxes injected by JS -->
+                    </div>
                 </div>
 
-                <div class="flex flex-col w-full sm:w-auto">
-                    <select id="major-select" onchange="filterAlumni()" class="p-2 border border-blue-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-gray-700 text-sm w-full min-w-[200px]">
-                        <option value="">All Majors</option>
-                        <!-- Populated by JS -->
-                    </select>
+                <!-- Major Multi-Select -->
+                <div class="relative w-full sm:w-auto min-w-[200px]" id="major-filter-group">
+                    <button onclick="toggleDropdown('major-dropdown')" id="major-btn" class="w-full text-left p-2 border border-blue-200 rounded-lg shadow-sm bg-white text-gray-700 text-sm flex justify-between items-center hover:border-blue-400 focus:ring-2 focus:ring-blue-500">
+                        <span id="major-btn-text">All Majors</span>
+                        <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="major-dropdown" class="hidden absolute top-full left-0 w-full sm:w-64 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 p-2 filter-dropdown z-50">
+                        <!-- Checkboxes injected by JS -->
+                    </div>
                 </div>
 
                 <button onclick="resetFilters()" class="w-full sm:w-auto bg-blue-800 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-150 flex items-center justify-center gap-2">
@@ -105,7 +129,7 @@
     </header>
 
     <!-- MAIN GRID -->
-    <main class="max-w-7xl mx-auto p-4 md:p-8">
+    <main class="max-w-7xl mx-auto p-4 md:p-8 relative z-0">
         <div id="alumni-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
             <!-- Cards injected here -->
         </div>
@@ -116,7 +140,7 @@
     </main>
 
     <!-- WELCOME MODAL -->
-    <div id="welcome-modal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50 modal-overlay">
+    <div id="welcome-modal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-[100] modal-overlay">
         <div class="bg-amber-100 rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-sm sm:max-w-md border-t-8 border-amber-600 modal-content">
             <h2 class="text-2xl font-extrabold mb-4 text-center text-amber-800">
                 A Thank You to Our Alumni <span role="img" aria-label="confetti">🎉</span>
@@ -131,13 +155,13 @@
     </div>
 
     <!-- PROFILE MODAL -->
-    <div id="profile-modal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50 backdrop-blur-sm modal-overlay" onclick="handleClickOutside(event)">
+    <div id="profile-modal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-[100] backdrop-blur-sm modal-overlay" onclick="handleClickOutside(event)">
         
         <!-- Navigation Buttons -->
-        <button id="nav-prev" onclick="prevProfile(event)" class="absolute left-4 top-1/2 -translate-y-1/2 z-[60] w-10 h-10 rounded-full flex items-center justify-center text-white transition-all bg-blue-800/80 hover:bg-blue-900">
+        <button id="nav-prev" onclick="prevProfile(event)" class="absolute left-4 top-1/2 -translate-y-1/2 z-[110] w-10 h-10 rounded-full flex items-center justify-center text-white transition-all bg-blue-800/80 hover:bg-blue-900">
             <i class="fas fa-chevron-left"></i>
         </button>
-        <button id="nav-next" onclick="nextProfile(event)" class="absolute right-4 top-1/2 -translate-y-1/2 z-[60] w-10 h-10 rounded-full flex items-center justify-center text-white transition-all bg-blue-800/80 hover:bg-blue-900">
+        <button id="nav-next" onclick="nextProfile(event)" class="absolute right-4 top-1/2 -translate-y-1/2 z-[110] w-10 h-10 rounded-full flex items-center justify-center text-white transition-all bg-blue-800/80 hover:bg-blue-900">
             <i class="fas fa-chevron-right"></i>
         </button>
 
@@ -718,64 +742,73 @@
             renderGrid(ALUMNI_DATA);
             showWelcomeModal();
             
-            // Close modal logic on escape
+            // Close modal logic on escape and click outside dropdowns
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeProfileModal();
                 if (e.key === 'ArrowLeft') prevProfile();
                 if (e.key === 'ArrowRight') nextProfile();
             });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#college-filter-group')) {
+                    document.getElementById('college-dropdown').classList.add('hidden');
+                }
+                if (!e.target.closest('#major-filter-group')) {
+                    document.getElementById('major-dropdown').classList.add('hidden');
+                }
+            });
         };
 
-// --- AUDIO LOGIC ---
-function playAudio(url) {
-    // Stop any currently playing
-    if (globalAudio) {
-        globalAudio.pause();
-        globalAudio.currentTime = 0;
-        globalAudio = null;
-    }
-    
-    // Extract file ID
-    let fileId = url.match(/\/d\/([^\/]+)/)[1];
-    
-    // Find or create audio player container
-    let playerContainer = document.getElementById('audio-player-container');
-    
-    if (!playerContainer) {
-        // Create container if it doesn't exist
-        playerContainer = document.createElement('div');
-        playerContainer.id = 'audio-player-container';
-        playerContainer.className = 'mt-4 mb-4';
-        
-        // Insert after the button
-        const headerContainer = document.getElementById('modal-advice-header-container');
-        headerContainer.appendChild(playerContainer);
-    }
-    
-    // Toggle player visibility
-    if (playerContainer.innerHTML && playerContainer.style.display !== 'none') {
-        // If player is showing, hide it
-        playerContainer.style.display = 'none';
-        playerContainer.innerHTML = '';
-    } else {
-        // Show/update player
-        playerContainer.style.display = 'block';
-        playerContainer.innerHTML = `
-            <div class="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-semibold text-gray-700">Audio Player</span>
-                    <button onclick="document.getElementById('audio-player-container').style.display='none'" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <iframe src="https://drive.google.com/file/d/${fileId}/preview" width="100%" height="80" frameborder="0" allow="autoplay"></iframe>
-                <div class="mt-2 text-xs text-gray-500 text-center">
-                    If audio doesn't play automatically, <a href="${url.replace('/preview', '/view')}" target="_blank" class="text-blue-600 hover:underline">click here to listen in new tab</a>
-                </div>
-            </div>
-        `;
-    }
-}
+        // --- AUDIO LOGIC ---
+        function playAudio(url) {
+            // Stop any currently playing
+            if (globalAudio) {
+                globalAudio.pause();
+                globalAudio.currentTime = 0;
+                globalAudio = null;
+            }
+            
+            // Extract file ID
+            let fileId = url.match(/\/d\/([^\/]+)/)[1];
+            
+            // Find or create audio player container
+            let playerContainer = document.getElementById('audio-player-container');
+            
+            if (!playerContainer) {
+                // Create container if it doesn't exist
+                playerContainer = document.createElement('div');
+                playerContainer.id = 'audio-player-container';
+                playerContainer.className = 'mt-4 mb-4';
+                
+                // Insert after the button
+                const headerContainer = document.getElementById('modal-advice-header-container');
+                headerContainer.appendChild(playerContainer);
+            }
+            
+            // Toggle player visibility
+            if (playerContainer.innerHTML && playerContainer.style.display !== 'none') {
+                // If player is showing, hide it
+                playerContainer.style.display = 'none';
+                playerContainer.innerHTML = '';
+            } else {
+                // Show/update player
+                playerContainer.style.display = 'block';
+                playerContainer.innerHTML = `
+                    <div class="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700">Audio Player</span>
+                            <button onclick="document.getElementById('audio-player-container').style.display='none'" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <iframe src="https://drive.google.com/file/d/${fileId}/preview" width="100%" height="80" frameborder="0" allow="autoplay"></iframe>
+                        <div class="mt-2 text-xs text-gray-500 text-center">
+                            If audio doesn't play automatically, <a href="${url.replace('/preview', '/view')}" target="_blank" class="text-blue-600 hover:underline">click here to listen in new tab</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
         
         function stopAudio() {
             if (globalAudio) {
@@ -799,45 +832,87 @@ function playAudio(url) {
             });
         }
 
+        // --- FILTER HELPERS ---
+        function getNormalizedCollege(name) {
+            // "Condense all Indiana University versions to one"
+            if (name.includes("Indiana University")) return "Indiana University";
+            // "Same for UMich"
+            if (name.includes("University of Michigan")) return "University of Michigan";
+            // Also grouping Cincy to be safe/consistent
+            if (name.includes("University of Cincinnati")) return "University of Cincinnati";
+            return name;
+        }
+
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('hidden');
+        }
+
         // --- FILTER LOGIC ---
         function populateFilters() {
-            const collegeSelect = document.getElementById('college-select');
-            const majorSelect = document.getElementById('major-select');
+            const collegeDropdown = document.getElementById('college-dropdown');
+            const majorDropdown = document.getElementById('major-dropdown');
 
-            const colleges = new Set(ALUMNI_DATA.map(a => a.attending.name));
+            // Use Set for uniqueness, applying normalization
+            const colleges = new Set();
             const majors = new Set();
             
-            // Split majors logic (Commas and Ampersands) or use custom filter tags
             ALUMNI_DATA.forEach(a => {
-                // If filterMajors exists, use that. Otherwise split string.
+                colleges.add(getNormalizedCollege(a.attending.name));
+                
                 const tags = a.attending.filterMajors || a.attending.major.split(/[&,]+/).map(m => m.trim());
                 tags.forEach(m => majors.add(m));
             });
 
+            // Populate College Checkboxes
             Array.from(colleges).sort().forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c;
-                opt.innerText = c;
-                collegeSelect.appendChild(opt);
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 p-2 hover:bg-gray-50 rounded cursor-pointer';
+                label.innerHTML = `
+                    <input type="checkbox" value="${c}" class="custom-checkbox college-checkbox" onchange="filterAlumni()">
+                    <span class="text-gray-700 text-sm">${c}</span>
+                `;
+                collegeDropdown.appendChild(label);
             });
 
+            // Populate Major Checkboxes
             Array.from(majors).sort().forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m;
-                opt.innerText = m;
-                majorSelect.appendChild(opt);
+                const label = document.createElement('label');
+                label.className = 'flex items-center space-x-2 p-2 hover:bg-gray-50 rounded cursor-pointer';
+                label.innerHTML = `
+                    <input type="checkbox" value="${m}" class="custom-checkbox major-checkbox" onchange="filterAlumni()">
+                    <span class="text-gray-700 text-sm">${m}</span>
+                `;
+                majorDropdown.appendChild(label);
             });
         }
 
         function filterAlumni() {
-            const collegeVal = document.getElementById('college-select').value;
-            const majorVal = document.getElementById('major-select').value;
+            // Get selected values from checkboxes
+            const selectedColleges = Array.from(document.querySelectorAll('.college-checkbox:checked')).map(cb => cb.value);
+            const selectedMajors = Array.from(document.querySelectorAll('.major-checkbox:checked')).map(cb => cb.value);
 
+            // Update Button Text
+            const collegeBtnText = document.getElementById('college-btn-text');
+            if (selectedColleges.length === 0) collegeBtnText.innerText = "All Colleges";
+            else if (selectedColleges.length === 1) collegeBtnText.innerText = selectedColleges[0];
+            else collegeBtnText.innerText = `${selectedColleges.length} Selected`;
+
+            const majorBtnText = document.getElementById('major-btn-text');
+            if (selectedMajors.length === 0) majorBtnText.innerText = "All Majors";
+            else if (selectedMajors.length === 1) majorBtnText.innerText = selectedMajors[0];
+            else majorBtnText.innerText = `${selectedMajors.length} Selected`;
+
+            // Filter Data
             currentFilteredList = ALUMNI_DATA.filter(p => {
-                const matchesCollege = collegeVal ? p.attending.name === collegeVal : true;
+                // College Logic: OR (Match any selected)
+                // We must normalize the person's college name before checking inclusion
+                const personCollege = getNormalizedCollege(p.attending.name);
+                const matchesCollege = selectedColleges.length === 0 || selectedColleges.includes(personCollege);
                 
+                // Major Logic: OR (Match any selected)
                 const tags = p.attending.filterMajors || p.attending.major.split(/[&,]+/).map(m => m.trim());
-                const matchesMajor = majorVal ? tags.includes(majorVal) : true;
+                const matchesMajor = selectedMajors.length === 0 || tags.some(tag => selectedMajors.includes(tag));
                 
                 return matchesCollege && matchesMajor;
             });
@@ -857,8 +932,8 @@ function playAudio(url) {
         }
 
         function resetFilters() {
-            document.getElementById('college-select').value = "";
-            document.getElementById('major-select').value = "";
+            document.querySelectorAll('.college-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.major-checkbox').forEach(cb => cb.checked = false);
             filterAlumni();
         }
 
